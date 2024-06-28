@@ -1,7 +1,10 @@
-const Main1 = (props) => {
+import LeftMenu from "./layouts/LeftMenu";
+
+const LoginPage = (props) => {
     return (
         <div className="layout-wrapper layout-content-navbar">
             <div className="layout-container">
+
                 <aside id="layout-menu" className="layout-menu menu-vertical menu bg-menu-theme">
                     <div className="app-brand demo">
                         <a href="index.html" className="app-brand-link">
@@ -386,7 +389,7 @@ const Main1 = (props) => {
                             </a>
                         </li>
                     </ul>
-                </aside>
+                </aside>;
 
                 <div className="layout-page">
                     <nav
@@ -429,7 +432,7 @@ const Main1 = (props) => {
                                     <a className="nav-link dropdown-toggle hide-arrow" href=""
                                        data-bs-toggle="dropdown">
                                         <div className="avatar avatar-online">
-                                            <img src="/assets/img/avatars/1.png" alt
+                                            <img src="/src/assets/img/avatars/1.png" alt
                                                  className="w-px-40 h-auto rounded-circle"/>
                                         </div>
                                     </a>
@@ -439,7 +442,7 @@ const Main1 = (props) => {
                                                 <div className="d-flex">
                                                     <div className="flex-shrink-0 me-3">
                                                         <div className="avatar avatar-online">
-                                                            <img src="/assets/img/avatars/1.png" alt
+                                                            <img src="/src/assets/img/avatars/1.png" alt
                                                                  className="w-px-40 h-auto rounded-circle"/>
                                                         </div>
                                                     </div>
@@ -513,7 +516,7 @@ const Main1 = (props) => {
                                             <div className="col-sm-5 text-center text-sm-left">
                                                 <div className="card-body pb-0 px-0 px-md-4">
                                                     <img
-                                                        src="/assets/img/illustrations/man-with-laptop-light.png"
+                                                        src="/src/assets/img/illustrations/man-with-laptop-light.png"
                                                         height="140"
                                                         alt="View Badge User"
                                                         data-app-dark-img="illustrations/man-with-laptop-dark.png"
@@ -533,7 +536,7 @@ const Main1 = (props) => {
                                                         className="card-title d-flex align-items-start justify-content-between">
                                                         <div className="avatar flex-shrink-0">
                                                             <img
-                                                                src="/assets/img/icons/unicons/chart-success.png"
+                                                                src="/src/assets/img/icons/unicons/chart-success.png"
                                                                 alt="chart success"
                                                                 className="rounded"
                                                             />
@@ -572,7 +575,7 @@ const Main1 = (props) => {
                                                         className="card-title d-flex align-items-start justify-content-between">
                                                         <div className="avatar flex-shrink-0">
                                                             <img
-                                                                src="/assets/img/icons/unicons/wallet-info.png"
+                                                                src="/src/assets/img/icons/unicons/wallet-info.png"
                                                                 alt="Credit Card"
                                                                 className="rounded"
                                                             />
@@ -678,7 +681,7 @@ const Main1 = (props) => {
                                                     <div
                                                         className="card-title d-flex align-items-start justify-content-between">
                                                         <div className="avatar flex-shrink-0">
-                                                            <img src="/assets/img/icons/unicons/paypal.png"
+                                                            <img src="/src/assets/img/icons/unicons/paypal.png"
                                                                  alt="Credit Card" className="rounded"/>
                                                         </div>
                                                         <div className="dropdown">
@@ -714,7 +717,7 @@ const Main1 = (props) => {
                                                     <div
                                                         className="card-title d-flex align-items-start justify-content-between">
                                                         <div className="avatar flex-shrink-0">
-                                                            <img src="/assets/img/icons/unicons/cc-primary.png"
+                                                            <img src="/src/assets/img/icons/unicons/cc-primary.png"
                                                                  alt="Credit Card" className="rounded"/>
                                                         </div>
                                                         <div className="dropdown">
@@ -910,7 +913,7 @@ const Main1 = (props) => {
                                                      id="navs-tabs-line-card-income" role="tabpanel">
                                                     <div className="d-flex p-4 pt-3">
                                                         <div className="avatar flex-shrink-0 me-3">
-                                                            <img src="/assets/img/icons/unicons/wallet.png"
+                                                            <img src="/src/assets/img/icons/unicons/wallet.png"
                                                                  alt="User"/>
                                                         </div>
                                                         <div>
@@ -970,7 +973,7 @@ const Main1 = (props) => {
                                             <ul className="p-0 m-0">
                                                 <li className="d-flex mb-4 pb-1">
                                                     <div className="avatar flex-shrink-0 me-3">
-                                                        <img src="/assets/img/icons/unicons/paypal.png" alt="User"
+                                                        <img src="/src/assets/img/icons/unicons/paypal.png" alt="User"
                                                              className="rounded"/>
                                                     </div>
                                                     <div
@@ -987,7 +990,7 @@ const Main1 = (props) => {
                                                 </li>
                                                 <li className="d-flex mb-4 pb-1">
                                                     <div className="avatar flex-shrink-0 me-3">
-                                                        <img src="/assets/img/icons/unicons/wallet.png" alt="User"
+                                                        <img src="/src/assets/img/icons/unicons/wallet.png" alt="User"
                                                              className="rounded"/>
                                                     </div>
                                                     <div
@@ -1004,7 +1007,7 @@ const Main1 = (props) => {
                                                 </li>
                                                 <li className="d-flex mb-4 pb-1">
                                                     <div className="avatar flex-shrink-0 me-3">
-                                                        <img src="/assets/img/icons/unicons/chart.png" alt="User"
+                                                        <img src="/src/assets/img/icons/unicons/chart.png" alt="User"
                                                              className="rounded"/>
                                                     </div>
                                                     <div
@@ -1021,7 +1024,7 @@ const Main1 = (props) => {
                                                 </li>
                                                 <li className="d-flex mb-4 pb-1">
                                                     <div className="avatar flex-shrink-0 me-3">
-                                                        <img src="/assets/img/icons/unicons/cc-success.png" alt="User"
+                                                        <img src="/src/assets/img/icons/unicons/cc-success.png" alt="User"
                                                              className="rounded"/>
                                                     </div>
                                                     <div
@@ -1039,7 +1042,7 @@ const Main1 = (props) => {
                                                 </li>
                                                 <li className="d-flex mb-4 pb-1">
                                                     <div className="avatar flex-shrink-0 me-3">
-                                                        <img src="/assets/img/icons/unicons/wallet.png" alt="User"
+                                                        <img src="/src/assets/img/icons/unicons/wallet.png" alt="User"
                                                              className="rounded"/>
                                                     </div>
                                                     <div
@@ -1056,7 +1059,7 @@ const Main1 = (props) => {
                                                 </li>
                                                 <li className="d-flex">
                                                     <div className="avatar flex-shrink-0 me-3">
-                                                        <img src="/assets/img/icons/unicons/cc-warning.png" alt="User"
+                                                        <img src="/src/assets/img/icons/unicons/cc-warning.png" alt="User"
                                                              className="rounded"/>
                                                     </div>
                                                     <div
@@ -1123,4 +1126,4 @@ const Main1 = (props) => {
     )
 }
 
-export default Main1;
+export default LoginPage;

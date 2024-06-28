@@ -4,6 +4,8 @@
 
 'use strict';
 
+import { config } from './config'
+
 (function () {
   let cardColor, headingColor, axisColor, shadeColor, borderColor;
 
