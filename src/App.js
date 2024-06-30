@@ -3,6 +3,18 @@ import './assets/css/pages/page-auth.css';
 import './assets/css/core.css';
 import './assets/css/theme-default.css';
 
+import './assets/css/demo.css';
+
+// js
+import './assets/js/main';
+
+// fonts
+import './assets/fonts/boxicons.css';
+
+// libs
+import './assets/libs/perfect-scrollbar/perfect-scrollbar';
+import './assets/libs/perfect-scrollbar/perfect-scrollbar.scss';
+
 import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
 import Main1 from "./pages/Main1";
 import Main2 from "./pages/Main2";

@@ -1,8 +1,12 @@
+import LeftMenu from "./layout/LeftMenu";
+
 const Main1 = (props) => {
     return (
-        <>
-            <h3>메인 1</h3>
-        </>
+        <div className="layout-wrapper layout-content-navbar">
+            <div className="layout-container">
+                <LeftMenu/>
+            </div>
+        </div>
     )
 }
 
