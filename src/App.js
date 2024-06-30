@@ -9,8 +9,7 @@ import Main2 from "./pages/Main2";
 import NotFound from "./pages/NotFound";
 
 import LoginPage from "./pages/account/LoginPage";
-
-const loginPath = "/cms/console/login";
+import VerifyPwd from "./pages/account/VerifyPwd";
 
 function App() {
     const isLoggedIn = () => {
@@ -21,15 +20,23 @@ function App() {
         <div className="App">
             <BrowserRouter>
                 <Routes>
-                    <Route path={loginPath} element={<LoginPage/>}></Route>
                     <Route path="*" element={
-                        <PrivateRoute isLoggedIn={isLoggedIn}>
-                            <Routes>
-                                <Route path="/main1" element={<Main1/>}/>
-                                <Route path="/main2" element={<Main2/>}/>
-                                <Route path="*" element={<NotFound/>}></Route>
-                            </Routes>
-                        </PrivateRoute>
+                        <>
+                            <AccountRoute isLoggedIn={isLoggedIn}>
+                                <Routes>
+                                    <Route path="/cms/console/login" element={<LoginPage/>}></Route>
+                                    <Route path="/cms/verify/pwd" element={<VerifyPwd/>}></Route>
+                                    <Route path="*" element={<NotFound/>}></Route>
+                                </Routes>
+                            </AccountRoute>
+                            <PrivateRoute isLoggedIn={isLoggedIn}>
+                                <Routes>
+                                    <Route path="/main1" element={<Main1/>}/>
+                                    <Route path="/main2" element={<Main2/>}/>
+                                    <Route path="*" element={<NotFound/>}></Route>
+                                </Routes>
+                            </PrivateRoute>
+                        </>
                     }/>
                 </Routes>
             </BrowserRouter>
@@ -37,8 +44,12 @@ function App() {
     );
 }
 
+function AccountRoute({children, isLoggedIn}) {
+    return !isLoggedIn() ? children : <Navigate to="/main1"/>;
+}
+
 function PrivateRoute({children, isLoggedIn}) {
-    return isLoggedIn() ? children : <Navigate to={loginPath}/>;
+    return isLoggedIn() ? children : <Navigate to="/cms/console/login"/>;
 }
 
 export default App;

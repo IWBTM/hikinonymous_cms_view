@@ -1,44 +1,27 @@
 import {useState} from "react";
 import api from "../../api/api";
-import {useNavigate} from "react-router-dom";
 
-const LoginPage = (props) => {
-    const [ isSubmit, setIsSubmit ] = useState(false);
-    const [ email, setEmail ] = useState('');
-    const [ pwd, setPwd ] = useState('');
-
-    const navigate = useNavigate();
-
-    const loginProc = async () => {
-        const response = await api.post('/cms/login/proc', JSON.stringify({
-            email: email,
-            pwd: pwd
-        }))
-        const responseDto = response.data;
-        alert(responseDto.message);
-        if (responseDto.code == 200) {
-            localStorage.setItem('Authorization', responseDto.data);
-            navigate('/main1');
-        }
-    }
+const VerifyPwd = (props) => {
+    const [email, setEmail] = useState('');
 
     const handleForm = (e) => {
         const target = e.currentTarget;
         if (target.name == 'email-username') setEmail(target.value);
-        else setPwd(target.value);
     }
 
     return (
         <div className="container-xxl">
             <div className="authentication-wrapper authentication-basic container-p-y">
-                <div className="authentication-inner">
+                <div className="authentication-inner py-4">
+
                     <div className="card">
                         <div className="card-body">
                             <div className="app-brand justify-content-center">
                                 <a href="index.html" className="app-brand-link gap-2">
-                                    <span className="app-brand-logo demo">
-                                        <svg width="25" viewBox="0 0 25 42" version="1.1" xmlns="http://www.w3.org/2000/svg"
-                                             svglink="http://www.w3.org/1999/xlink">
+                                     <span className="app-brand-logo demo">
+                                        <svg width="25" viewBox="0 0 25 42" version="1.1"
+                                             xmlns="http://www.w3.org/2000/svg"
+                                             svgxlink="http://www.w3.org/1999/xlink">
                                           <defs>
                                             <path
                                                 d="M13.7918663,0.358365126 L3.39788168,7.44174259 C0.566865006,9.69408886 -0.379795268,12.4788597 0.557900856,15.7960551 C0.68998853,16.2305145 1.09562888,17.7872135 3.12357076,19.2293357 C3.8146334,19.7207684 5.32369333,20.3834223 7.65075054,21.2172976 L7.59773219,21.2525164 L2.63468769,24.5493413 C0.445452254,26.3002124 0.0884951797,28.5083815 1.56381646,31.1738486 C2.83770406,32.8170431 5.20850219,33.2640127 7.09180128,32.5391577 C8.347334,32.0559211 11.4559176,30.0011079 16.4175519,26.3747182 C18.0338572,24.4997857 18.6973423,22.4544883 18.4080071,20.2388261 C17.963753,17.5346866 16.1776345,15.5799961 13.0496516,14.3747546 L10.9194936,13.4715819 L18.6192054,7.984237 L13.7918663,0.358365126 Z"
@@ -53,7 +36,8 @@ const LoginPage = (props) => {
                                                 d="M20.6,7.13333333 L25.6,13.8 C26.2627417,14.6836556 26.0836556,15.9372583 25.2,16.6 C24.8538077,16.8596443 24.4327404,17 24,17 L14,17 C12.8954305,17 12,16.1045695 12,15 C12,14.5672596 12.1403557,14.1461923 12.4,13.8 L17.4,7.13333333 C18.0627417,6.24967773 19.3163444,6.07059163 20.2,6.73333333 C20.3516113,6.84704183 20.4862915,6.981722 20.6,7.13333333 Z"
                                                 id="path-5"></path>
                                           </defs>
-                                          <g id="g-app-brand" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
+                                          <g id="g-app-brand" stroke="none" strokeWidth="1" fill="none"
+                                             fillRule="evenodd">
                                             <g id="Brand-Logo" transform="translate(-27.000000, -15.000000)">
                                               <g id="Icon" transform="translate(27.000000, 15.000000)">
                                                 <g id="Mask" transform="translate(0.000000, 8.000000)">
@@ -71,7 +55,7 @@ const LoginPage = (props) => {
                                                   </g>
                                                 </g>
                                                 <g id="Triangle"
-                                                   transform="translate(19.000000, 11.000000) rotate(-300.000000) translate(-19.000000, -11.000000) ">
+                                                   transform="translate(19.000000, 11.000000) ro    tate(-300.000000) translate(-19.000000, -11.000000) ">
                                                   <use fill="#696cff" href="#path-5"></use>
                                                   <use fillOpacity="0.2" fill="#FFFFFF" href="#path-5"></use>
                                                 </g>
@@ -83,32 +67,27 @@ const LoginPage = (props) => {
                                     <span className="app-brand-text demo text-body fw-bold">Hikinonymous Admin</span>
                                 </a>
                             </div>
-                            <h4 className="mb-2">관리자님, 환영합니다. 👋</h4>
-
-                            <form id="formAuthentication" className="mb-3" action="index.html">
-                                <div className="mb-3">
+                            <h4 className="mb-3">비밀번호를 잊으셨나요 ? 🔒</h4>
+                            <p className="mb-0">관리자님의 이메일을 입력하시면,</p>
+                            <p className="mb-4">새로운 비밀번호를 보내드려요.</p>
+                            <form id="formAuthentication" className="mb-3 fv-plugins-bootstrap5 fv-plugins-framework"
+                                  action="auth-reset-password-basic.html" method="GET" noValidate="novalidate">
+                                <div className="mb-3 fv-plugins-icon-container">
                                     <label htmlFor="email" className="form-label">Email</label>
-                                    <input type="text" className="form-control" id="email" name="email-username"
-                                           placeholder="이메일을 입력해주세요." autoFocus="" onChange={handleForm} value={email}/>
+                                    <input type="text" className="form-control" id="email" name="email"
+                                           placeholder="이메일을 입력해주세요." autoFocus=""/>
+                                    <div
+                                        className="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></div>
                                 </div>
-                                <div className="mb-3 form-password-toggle">
-                                    <div className="d-flex justify-content-between">
-                                        <label className="form-label" htmlFor="password">Password</label>
-                                        <a href="/cms/verify/pwd">
-                                            <small>비밀번호를 잊으셨나요 ?</small>
-                                        </a>
-                                    </div>
-                                    <div className="input-group input-group-merge">
-                                        <input type="password" id="password" className="form-control" name="password"
-                                               placeholder="············" aria-describedby="password" onChange={handleForm} value={pwd}/>
-                                        <span className="input-group-text cursor-pointer"><i
-                                            className="bx bx-hide"></i></span>
-                                    </div>
-                                </div>
-                                <div className="mb-3">
-                                    <button className="btn btn-primary d-grid w-100" type="button" onClick={loginProc}>로그인</button>
-                                </div>
-                            </form>
+                                <button className="btn btn-primary d-grid w-100">새로운 비밀번호 받기</button>
+                                <input type="hidden"/></form>
+                            <div className="text-center">
+                                <a href="/cms/console/login"
+                                   className="d-flex align-items-center justify-content-center">
+                                    <i className="bx bx-chevron-left scaleX-n1-rtl bx-sm"></i>
+                                    돌아가기
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -116,4 +95,4 @@ const LoginPage = (props) => {
         </div>)
 }
 
-export default LoginPage;
+export default VerifyPwd;
