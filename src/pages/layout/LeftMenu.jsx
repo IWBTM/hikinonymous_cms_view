@@ -1,6 +1,25 @@
 import {ScrollBar} from "../../assets/libs/perfect-scrollbar/perfect-scrollbar";
+import {useState} from "react";
+import {useNavigate} from "react-router-dom";
 
 const LeftMenu = (props) => {
+    const [ isActive, setIsActive ] = useState(false);
+    const [ isOpen, setIsOpen ] = useState(false);
+
+    const navigate = useNavigate();
+
+    const handleIsOpen = (e) => {
+        e.preventDefault();
+        if (e.currentTarget.className.indexOf('menu-toggle') > -1) {
+            let parentEle = e.currentTarget.parentElement;
+            let openIndex = parentEle.className.indexOf('open');
+            if (openIndex > -1) parentEle.className = parentEle.className.substring(0, openIndex);
+            else parentEle.className += ' open';
+        } else {
+            navigate(e.currentTarget.href)
+        }
+    }
+
     return <aside id="layout-menu" className="layout-menu menu-vertical menu bg-menu-theme">
             <div className="app-brand demo">
                 <a href="index.html" className="app-brand-link">
@@ -72,21 +91,21 @@ const LeftMenu = (props) => {
             <ScrollBar>
                 <ul className="menu-inner py-1">
                 <li className="menu-item">
-                    <a href="index.html" className="menu-link">
+                    <a href="index.html" className="menu-link" onClick={handleIsOpen}>
                         <i className="menu-icon tf-icons bx bx-home-circle"></i>
                         <div data-i18n="Analytics">Dashboard</div>
                     </a>
                 </li>
 
                 <li className="menu-item">
-                    <a href="javascript:void(0);" className="menu-link menu-toggle">
+                    <a className="menu-link menu-toggle cursor-pointer" onClick={handleIsOpen}>
                         <i className="menu-icon tf-icons bx bx-layout"></i>
                         <div data-i18n="Layouts">Layouts</div>
                     </a>
 
                     <ul className="menu-sub">
                         <li className="menu-item">
-                            <a href="layouts-without-menu.html" className="menu-link">
+                            <a href="layouts-without-menu.html" className="menu-link" onClick={handleIsOpen}>
                                 <div data-i18n="Without menu">Without menu</div>
                             </a>
                         </li>
