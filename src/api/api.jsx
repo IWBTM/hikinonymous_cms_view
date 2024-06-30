@@ -3,7 +3,7 @@ import axios from 'axios';
 const api = axios.create({
     headers: {
         "Content-Type": "application/json; charset=utf-8",
-        "Authorization": `Bearer ${localStorage.getItem("Access-Token")}`,
+        "Authorization": `Bearer ${localStorage.getItem("Authorization")}`,
         "Access-Control-Allow-Origin": 'http://localhost:8082',
         "Access-Control-Allow-Headers": "*",
     },

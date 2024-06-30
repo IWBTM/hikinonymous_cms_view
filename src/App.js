@@ -8,7 +8,7 @@ import Main1 from "./pages/Main1";
 import Main2 from "./pages/Main2";
 import NotFound from "./pages/NotFound";
 
-import LoginPage from "./pages/LoginPage";
+import LoginPage from "./pages/account/LoginPage";
 
 const loginPath = "/cms/console/login";
 

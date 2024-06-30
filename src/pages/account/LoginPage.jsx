@@ -1,4 +1,29 @@
+import {useState} from "react";
+import api from "../../api/api";
+
 const LoginPage = (props) => {
+    const [ isSubmit, setIsSubmit ] = useState(false);
+    const [ email, setEmail ] = useState('');
+    const [ pwd, setPwd ] = useState('');
+
+    const loginProc = async () => {
+        const response = await api.post('/cms/login/proc', JSON.stringify({
+            email: email,
+            pwd: pwd
+        }))
+        const responseDto = response.data;
+        if (responseDto.code == 200) {
+            localStorage.setItem('Authorization', responseDto.data);
+        }
+        alert(responseDto.message);
+    }
+
+    const handleForm = (e) => {
+        const target = e.currentTarget;
+        if (target.name == 'email-username') setEmail(target.value);
+        else setPwd(target.value);
+    }
+
     return (
         <div className="container-xxl">
             <div className="authentication-wrapper authentication-basic container-p-y">
@@ -60,7 +85,7 @@ const LoginPage = (props) => {
                                 <div className="mb-3">
                                     <label htmlFor="email" className="form-label">Email</label>
                                     <input type="text" className="form-control" id="email" name="email-username"
-                                           placeholder="이메일을 입력해주세요." autoFocus=""/>
+                                           placeholder="이메일을 입력해주세요." autoFocus="" onChange={handleForm} value={email}/>
                                 </div>
                                 <div className="mb-3 form-password-toggle">
                                     <div className="d-flex justify-content-between">
@@ -71,13 +96,13 @@ const LoginPage = (props) => {
                                     </div>
                                     <div className="input-group input-group-merge">
                                         <input type="password" id="password" className="form-control" name="password"
-                                               placeholder="············" aria-describedby="password"/>
+                                               placeholder="············" aria-describedby="password" onChange={handleForm} value={pwd}/>
                                         <span className="input-group-text cursor-pointer"><i
                                             className="bx bx-hide"></i></span>
                                     </div>
                                 </div>
                                 <div className="mb-3">
-                                    <button className="btn btn-primary d-grid w-100" type="submit">로그인</button>
+                                    <button className="btn btn-primary d-grid w-100" type="button" onClick={loginProc}>로그인</button>
                                 </div>
                             </form>
                         </div>
