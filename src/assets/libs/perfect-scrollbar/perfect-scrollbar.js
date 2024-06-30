@@ -1,3 +1,3 @@
-import PerfectScrollbar from 'perfect-scrollbar';
+import ScrollBar from 'react-perfect-scrollbar';
 
-export { PerfectScrollbar };
+export { ScrollBar };

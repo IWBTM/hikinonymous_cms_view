@@ -1,9 +1,10 @@
+import {ScrollBar} from "../../assets/libs/perfect-scrollbar/perfect-scrollbar";
 
 const LeftMenu = (props) => {
     return <aside id="layout-menu" className="layout-menu menu-vertical menu bg-menu-theme">
             <div className="app-brand demo">
                 <a href="index.html" className="app-brand-link">
-                              <span className="app-brand-logo demo">
+                    <span className="app-brand-logo demo">
                                 <svg
                                     width="25"
                                     viewBox="0 0 25 42"
@@ -68,7 +69,8 @@ const LeftMenu = (props) => {
 
             <div className="menu-inner-shadow"></div>
 
-            <ul className="menu-inner py-1">
+            <ScrollBar>
+                <ul className="menu-inner py-1">
                 <li className="menu-item">
                     <a href="index.html" className="menu-link">
                         <i className="menu-icon tf-icons bx bx-home-circle"></i>
@@ -381,6 +383,7 @@ const LeftMenu = (props) => {
                     </a>
                 </li>
             </ul>
+            </ScrollBar>
         </aside>;
 }
 

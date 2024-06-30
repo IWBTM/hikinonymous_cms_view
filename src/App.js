@@ -5,15 +5,19 @@ import './assets/css/theme-default.css';
 
 import './assets/css/demo.css';
 
-// js
-import './assets/js/main';
-
 // fonts
 import './assets/fonts/boxicons.css';
 
-// libs
-import './assets/libs/perfect-scrollbar/perfect-scrollbar';
+// scss
 import './assets/libs/perfect-scrollbar/perfect-scrollbar.scss';
+import './assets/scss/fonts/boxicons.scss';
+
+// js
+
+import './assets/js/main';
+import './assets/libs/perfect-scrollbar/perfect-scrollbar';
+import './assets/libs/jquery/jquery';
+import './assets/libs/popper/popper';
 
 import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
 import Main1 from "./pages/Main1";
