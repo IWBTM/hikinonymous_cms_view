@@ -20,14 +20,78 @@ import './assets/libs/jquery/jquery';
 import './assets/libs/popper/popper';
 
 import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
-import Main1 from "./pages/Main1";
+import Dashboard from "./pages/Dashboard";
 import Main2 from "./pages/Main2";
 import NotFound from "./pages/NotFound";
 
 import LoginPage from "./pages/account/LoginPage";
 import VerifyPwd from "./pages/account/VerifyPwd";
+import LeftMenu from "./pages/layout/LeftMenu";
+import {useEffect, useState} from "react";
+import api from "./api/api";
 
 function App() {
+
+    const [ leftMenuList, setLeftMenuList ] = useState([]);
+
+    useEffect(() => {
+        const getMenuList = async () => {
+            const response = await api.get('/cms/menu/list');
+            const responseData = response.data;
+            if (responseData.code == 200) {
+                let resultList = responseData.data;
+                let menuList = [];
+                for (let i = 0; i < resultList.length; i++) {
+                    if (resultList[i].menuLevel == 1) {
+                        let menu = {
+                            cmsMenuSeq: resultList[i].cmsMenuSeq,
+                            menuNm: resultList[i].menuNm,
+                            menuCode: resultList[i].menuCode,
+                            filePath: resultList[i].filePath,
+                            isHaveChildren: false,
+                            children: []
+                        };
+
+                        for (let j = 0; j < resultList.length; j++) {
+                            if (resultList[j].menuLevel == 2 && resultList[i].authDir == resultList[j].authDir) {
+                                menu.isHaveChildren = true;
+                                menu.children.push({
+                                    cmsMenuSeq: resultList[j].cmsMenuSeq,
+                                    menuNm: resultList[j].menuNm,
+                                    menuCode: resultList[j].menuCode,
+                                    filePath: resultList[j].filePath,
+                                });
+                            }
+                        }
+                        menuList.push(menu);
+                    }
+                }
+                setLeftMenuList(menuList);
+            }
+        };
+
+        getMenuList();
+
+    }, []);
+
+    const renderParentPages = () => {
+        return leftMenuList.map(leftMenu => {
+            switch (leftMenu.menuCode) {
+                case 'ADMIN_MANAGEMENT': return <Route path={leftMenu.filePath} id={leftMenu.cmsMenuSeq} element={<Main2/>}/>;
+            }
+        });
+    }
+
+    const renderChildPages = () => {
+        return leftMenuList.map(leftMenu => {
+            leftMenu.children.map(menu => {
+                switch (menu.menuCode) {
+                    case 'MANAGER_MANAGEMENT': return <Route path={menu.filePath} id={menu.cmsMenuSeq} element={<Main2/>}/>;
+                }
+            });
+        });
+    }
+
     const isLoggedIn = () => {
         return !!localStorage.getItem('Authorization');
     };
@@ -46,11 +110,16 @@ function App() {
                                 </Routes>
                             </AccountRoute>
                             <PrivateRoute isLoggedIn={isLoggedIn}>
-                                <Routes>
-                                    <Route path="/main1" element={<Main1/>}/>
-                                    <Route path="/main2" element={<Main2/>}/>
-                                    <Route path="*" element={<NotFound/>}></Route>
-                                </Routes>
+                                <div className="layout-wrapper layout-content-navbar">
+                                    <div className="layout-container">
+                                        <LeftMenu leftMenuList={leftMenuList}/>
+                                        <Routes>
+                                            <Route path="/cms/dashboard" element={<Dashboard/>}/>
+                                            {renderPages()}
+                                            <Route path="*" element={<NotFound/>}></Route>
+                                        </Routes>
+                                    </div>
+                                </div>
                             </PrivateRoute>
                         </>
                     }/>
