@@ -4,16 +4,16 @@ import './assets/css/core.css';
 import './assets/css/theme-default.css';
 
 import './assets/css/demo.css';
+import './assets/css/pages/page-misc.css';
 
 // fonts
 import './assets/fonts/boxicons.css';
 
 // scss
-import './assets/libs/perfect-scrollbar/perfect-scrollbar.scss';
 import './assets/scss/fonts/boxicons.scss';
+import './assets/libs/perfect-scrollbar/perfect-scrollbar.scss';
 
 // js
-
 import './assets/js/main';
 import './assets/libs/perfect-scrollbar/perfect-scrollbar';
 import './assets/libs/jquery/jquery';
@@ -21,7 +21,7 @@ import './assets/libs/popper/popper';
 
 import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
-import Main2 from "./pages/Main2";
+import TablePage from "./pages/TablePage";
 import NotFound from "./pages/NotFound";
 
 import LoginPage from "./pages/account/LoginPage";
@@ -29,10 +29,12 @@ import VerifyPwd from "./pages/account/VerifyPwd";
 import LeftMenu from "./pages/layout/LeftMenu";
 import {useEffect, useState} from "react";
 import api from "./api/api";
+import MenuTitle from "./pages/layout/MenuTitle";
 
 function App() {
 
     const [ leftMenuList, setLeftMenuList ] = useState([]);
+    const [ currentMenu, setCurrentMenu ] = useState({});
 
     useEffect(() => {
         const getMenuList = async () => {
@@ -74,20 +76,37 @@ function App() {
 
     }, []);
 
-    const renderParentPages = () => {
-        return leftMenuList.map(leftMenu => {
-            switch (leftMenu.menuCode) {
-                case 'ADMIN_MANAGEMENT': return <Route path={leftMenu.filePath} id={leftMenu.cmsMenuSeq} element={<Main2/>}/>;
-            }
-        });
-    }
-
-    const renderChildPages = () => {
+    const renderPages = () => {
         let childPages = [];
         leftMenuList.map(leftMenu => {
             leftMenu.children.map(menu => {
                 switch (menu.menuCode) {
-                    case 'MANAGER_MANAGEMENT': childPages.push(<Route path={menu.filePath} id={menu.cmsMenuSeq} element={<Main2/>}/>);
+                    case 'MANAGER_MANAGEMENT': {
+                        childPages.push(
+                            <Route
+                                path={menu.filePath}
+                                id={menu.cmsMenuSeq}
+                                element={
+                                    <TablePage
+                                        leftMenuInfo={{
+                                                parentNm: leftMenu.menuNm,
+                                                childNm: menu.menuNm
+                                        }}
+                                        columnList={[
+                                            '관리자 이름',
+                                            '아이디(이메일)',
+                                            '관리자 상태',
+                                            '마지막 로그인 일',
+                                            '생성일'
+                                        ]}
+                                        filePath={
+                                            menu.filePath
+                                        }
+                                    />
+                                }
+                            />
+                        );
+                    }
                 }
             });
         });
@@ -108,12 +127,13 @@ function App() {
                                 <div className="layout-wrapper layout-content-navbar">
                                     <div className="layout-container">
                                         <LeftMenu leftMenuList={leftMenuList}/>
-                                        <Routes>
-                                            <Route path="/cms/dashboard" element={<Dashboard/>}/>
-                                            {renderParentPages()}
-                                            {renderChildPages()}
-                                            <Route path="*" element={<NotFound/>}></Route>
-                                        </Routes>
+                                        <div className="layout-page">
+                                            <Routes>
+                                                <Route path="/cms/dashboard" element={<Dashboard/>}/>
+                                                {renderPages()}
+                                                <Route path="*" element={<NotFound/>}></Route>
+                                            </Routes>
+                                        </div>
                                     </div>
                                 </div>
                             </PrivateRoute>

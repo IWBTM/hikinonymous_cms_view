@@ -1,8 +1,8 @@
-import LeftMenu from "./layout/LeftMenu";
-
 const Dashboard = (props) => {
     return (
-        <h1>hi</h1>
+        <div className="container-xxl flex-grow-1 container-p-y">
+            <h1>hi</h1>
+        </div>
     )
 }
 
