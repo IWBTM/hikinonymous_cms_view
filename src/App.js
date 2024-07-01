@@ -115,7 +115,7 @@ function App() {
                                 }
                             />
                         );
-                    }
+                    } break;
                     case 'CMS_MENU_MANAGEMENT': {
                         childPages.push(
                             <Route
@@ -148,7 +148,7 @@ function App() {
                                 }
                             />
                         );
-                    }
+                    }break;
                 }
             });
         });

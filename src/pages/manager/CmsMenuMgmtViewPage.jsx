@@ -14,7 +14,6 @@ const ManagerMgmtViewPage = ({leftMenuInfo}) => {
 
     const [ pwdChangeStep, setPwdChangeStep ] = useState(0);
     const [ isValidPwd, setIsValidPwd ] = useState(true);
-    const [ isChangedValidPwd, setIsChangedValidPwd ] = useState(false);
 
     const formRef = useRef();
 
@@ -99,7 +98,6 @@ const ManagerMgmtViewPage = ({leftMenuInfo}) => {
             } else {
                 setIsValidPwd(true);
             }
-            setIsChangedValidPwd(true);
         }
     }
 
