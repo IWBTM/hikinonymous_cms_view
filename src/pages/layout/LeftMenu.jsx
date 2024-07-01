@@ -13,8 +13,7 @@ const LeftMenu = ({leftMenuList}) => {
             if (openIndex > -1) parentEle.className = parentEle.className.substring(0, openIndex);
             else parentEle.className += ' open';
         } else {
-            console.log('e.currentTarget.href:: ', e.currentTarget.href)
-            navigate(e.currentTarget.href);
+            navigate(e.currentTarget.getAttribute('href'));
         }
     }
 
@@ -29,7 +28,7 @@ const LeftMenu = ({leftMenuList}) => {
                             <ul className="menu-sub">
                                 {leftMenu.children.map(menu => {
                                     return <li className="menu-item" key={menu.cmsMenuSeq}>
-                                                <a href={menu.filePath} className="menu-link" onClick={handleIsOpen}>
+                                                <a href={menu.filePath} className="menu-link cursor-pointer" onClick={handleIsOpen}>
                                                     <div data-i18n={menu.menuNm}>{menu.menuNm}</div>
                                                 </a>
                                             </li>

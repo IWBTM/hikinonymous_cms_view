@@ -83,13 +83,15 @@ function App() {
     }
 
     const renderChildPages = () => {
-        return leftMenuList.map(leftMenu => {
+        let childPages = [];
+        leftMenuList.map(leftMenu => {
             leftMenu.children.map(menu => {
                 switch (menu.menuCode) {
-                    case 'MANAGER_MANAGEMENT': return <Route path={menu.filePath} id={menu.cmsMenuSeq} element={<Main2/>}/>;
+                    case 'MANAGER_MANAGEMENT': childPages.push(<Route path={menu.filePath} id={menu.cmsMenuSeq} element={<Main2/>}/>);
                 }
             });
         });
+        return childPages;
     }
 
     const isLoggedIn = () => {
@@ -102,35 +104,30 @@ function App() {
                 <Routes>
                     <Route path="*" element={
                         <>
-                            <AccountRoute isLoggedIn={isLoggedIn}>
-                                <Routes>
-                                    <Route path="/cms/console/login" element={<LoginPage/>}></Route>
-                                    <Route path="/cms/verify/pwd" element={<VerifyPwd/>}></Route>
-                                    <Route path="*" element={<NotFound/>}></Route>
-                                </Routes>
-                            </AccountRoute>
                             <PrivateRoute isLoggedIn={isLoggedIn}>
                                 <div className="layout-wrapper layout-content-navbar">
                                     <div className="layout-container">
                                         <LeftMenu leftMenuList={leftMenuList}/>
                                         <Routes>
                                             <Route path="/cms/dashboard" element={<Dashboard/>}/>
-                                            {renderPages()}
+                                            {renderParentPages()}
+                                            {renderChildPages()}
                                             <Route path="*" element={<NotFound/>}></Route>
                                         </Routes>
                                     </div>
                                 </div>
                             </PrivateRoute>
+                            <Routes>
+                                <Route path="/cms/console/login" element={<LoginPage/>}></Route>
+                                <Route path="/cms/verify/pwd" element={<VerifyPwd/>}></Route>
+                                <Route path="*" element={<NotFound/>}></Route>
+                            </Routes>
                         </>
                     }/>
                 </Routes>
             </BrowserRouter>
         </div>
     );
-}
-
-function AccountRoute({children, isLoggedIn}) {
-    return !isLoggedIn() ? children : <Navigate to="/main1"/>;
 }
 
 function PrivateRoute({children, isLoggedIn}) {
