@@ -1,7 +1,7 @@
-// Pagination
+// Pagination.jsx
 // *******************************************************************************
 
-// Basic Pagination
+// Basic Pagination.jsx
 @mixin template-pagination-variant($parent, $background, $color: null) {
   #{$parent} .page-item.active .page-link,
   #{$parent}.pagination li.active > a:not(.page-link) {

@@ -1,7 +1,7 @@
-// Pagination
+// Pagination.jsx
 // *******************************************************************************
 
-// Pagination next, prev, first & last css padding
+// Pagination.jsx next, prev, first & last css padding
 .page-item {
   &.first,
   &.last,
@@ -25,7 +25,7 @@
   }
 }
 
-// Pagination basic style
+// Pagination.jsx basic style
 .page-link,
 .page-link > a {
   @include border-radius($border-radius);
@@ -48,7 +48,7 @@
 // Sizing
 // *******************************************************************************
 
-// Pagination Large
+// Pagination.jsx Large
 .pagination-lg .page-link,
 .pagination-lg > li > a:not(.page-link) {
   min-width: calc(
@@ -68,7 +68,7 @@
   }
 }
 
-// Pagination Small
+// Pagination.jsx Small
 .pagination-sm .page-link,
 .pagination-sm > li > a:not(.page-link) {
   min-width: calc(
