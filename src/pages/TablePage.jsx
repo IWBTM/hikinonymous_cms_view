@@ -3,28 +3,14 @@ import {useEffect, useState} from "react";
 import api from "../api/api";
 
 const TablePage = ({leftMenuInfo, columnList, filePath}) => {
-    const [ tabletResultList, setTableResultList ] = useState([]);
+    const [ tabletResult, setTableResultList ] = useState({});
 
     useEffect(() => {
         const getTableResultList = async () => {
             const response = await api.get(filePath);
-            console.log('response.data:: ', response.data)
             const responseData = response.data;
             if (responseData.code == 200) {
-                let resultList = responseData.data.content;
-                let resultTempList = [];
-                for (let i = 0; i < resultList.length; i++) {
-                    let result = {
-                        managerNm: resultList[i].managerNm,
-                        managerId: resultList[i].managerId,
-                        managerStatus: resultList[i].managerStatus,
-                        lastLoginDate: resultList[i].lastLoginDate,
-                        regDate: resultList[i].regDate,
-                    };
-
-                    resultTempList.push(result);
-                }
-                setTableResultList(resultTempList);
+                setTableResultList(responseData.data);
             }
         };
 
@@ -38,16 +24,19 @@ const TablePage = ({leftMenuInfo, columnList, filePath}) => {
     }
 
     const renderRows = () => {
-        return tabletResultList.map(row => {
-            return <tr>
-                        <th scope="row">1</th>
-                        <td>{row.managerNm}</td>
-                        <td>{row.managerId}</td>
-                        <td>{row.managerStatus}</td>
-                        <td>{row.lastLoginDate}</td>
-                        <td>{row.regDate}</td>
-                    </tr>;
-        });
+        if (tabletResult.totalElements > 0) {
+            return tabletResult.content.map((row, index) => {
+                let rowNum = (tabletResult.totalElements - tabletResult.totalPages) * (tabletResult.number + index + 1);
+                return <tr>
+                    <th scope="row">{rowNum}</th>
+                    <td>{row.managerNm}</td>
+                    <td>{row.managerId}</td>
+                    <td>{row.managerStatus}</td>
+                    <td>{row.lastLoginDate}</td>
+                    <td>{row.regDate}</td>
+                </tr>;
+            }).reverse();
+        }
     }
 
     return (
