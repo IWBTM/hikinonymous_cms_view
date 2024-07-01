@@ -6223,7 +6223,6 @@ a.invert-bg-dark:hover, a.invert-bg-dark:focus {
   }
 }
 .table th {
-  text-transform: uppercase;
   font-size: 0.75rem;
   letter-spacing: 1px;
 }

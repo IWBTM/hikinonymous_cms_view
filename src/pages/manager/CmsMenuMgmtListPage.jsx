@@ -10,13 +10,6 @@ const CmsMenuMgmtListPage = ({leftMenuInfo, filePath}) => {
     const formRef = useRef();
 
     useEffect(() => {
-        const getTableResultList = async () => {
-            const response = await api.get(`${filePath}/1`);
-            const responseData = response.data;
-            if (responseData.code === 200) {
-                setParentTableResultList(responseData.data);
-            }
-        };
 
         getTableResultList();
     }, []);
@@ -60,6 +53,14 @@ const CmsMenuMgmtListPage = ({leftMenuInfo, filePath}) => {
         })
     }
 
+    const getTableResultList = async () => {
+        const response = await api.get(`${filePath}/1`);
+        const responseData = response.data;
+        if (responseData.code === 200) {
+            setParentTableResultList(responseData.data);
+        }
+    };
+
     const getChildTableList = async (authDir) => {
         const response = await api.get(`${filePath}/2?authDir=${authDir}`);
         const responseData = response.data;
@@ -100,6 +101,43 @@ const CmsMenuMgmtListPage = ({leftMenuInfo, filePath}) => {
 
     const addNewMenu = () => {
         clearWriteForm();
+    }
+
+    const proc = async () => {
+        if (!valid()) return;
+        const formData = new FormData(formRef.current);
+        let requestDto = {};
+        formData.forEach((value, key) => {
+            requestDto[key] = value
+        })
+        const response = await api.post(`${filePath.substring(0, filePath.lastIndexOf('view'))}proc`, JSON.stringify(requestDto));
+
+        const responseDto = response.data;
+        if (responseDto.code === 200) {
+            if (requestDto.menuLevel == 1) {
+                getTableResultList();
+            } else {
+                getChildTableList(requestDto.authDir);
+            }
+            clearWriteForm();
+            alert('저장 되었습니다.');
+        } else {
+            console.log(responseDto.message)
+        }
+    }
+
+    const valid = () => {
+        const formData = new FormData(formRef.current);
+        const elements = formRef.current.elements;
+        let isValid = true;
+        formData.forEach((value, key) => {
+            let element = elements[key];
+            if (isValid && element.required && !value) {
+                alert(`${element.title}(은)는 필수 요소 입니다.`);
+                isValid = false;
+            }
+        })
+        return isValid;
     }
 
     return <div className="content-wrapper">
@@ -149,11 +187,17 @@ const CmsMenuMgmtListPage = ({leftMenuInfo, filePath}) => {
                 <div className="col-xl-12">
                     <div className="card mb-4">
                         <div className="card-body">
+                            <div className="mb-2">
+                                <small className="text-light fw-medium">폴더가 같아야 상위/하위 메뉴 관계가 형성 됩니다.</small>
+                            </div>
                             <form ref={formRef}>
+                                <input name="cmsMenuSeq" type="hidden"/>
+                                <input name="delYn" type="hidden"/>
                                 <div className="mb-3 row">
                                     <label htmlFor="html5-text-input" className="col-md-2 col-form-label">메뉴 레벨</label>
                                     <div className="col-md-10">
-                                        <select id="defaultSelect" className="form-select" name="menuLevel">
+                                        <select id="defaultSelect" className="form-select" name="menuLevel"
+                                                title="메뉴 레벨" required={true}>
                                             <option value="1">Parent</option>
                                             <option value="2">Child</option>
                                         </select>
@@ -162,43 +206,50 @@ const CmsMenuMgmtListPage = ({leftMenuInfo, filePath}) => {
                                 <div className="mb-3 row">
                                     <label htmlFor="html5-text-input" className="col-md-2 col-form-label">메뉴명</label>
                                     <div className="col-md-10">
-                                        <input className="form-control" type="text" name="menuNm" id=""/>
+                                        <input className="form-control" type="text" name="menuNm" id="" title="메뉴명"
+                                               required={true}/>
                                     </div>
                                 </div>
                                 <div className="mb-3 row">
                                     <label htmlFor="html5-text-input" className="col-md-2 col-form-label">메뉴 코드</label>
                                     <div className="col-md-10">
-                                        <input className="form-control" type="text" name="menuCode" id=""/>
+                                        <input className="form-control" type="text" name="menuCode" id="" title="메뉴 코드"
+                                               required={true}/>
                                     </div>
                                 </div>
                                 <div className="mb-3 row">
                                     <label htmlFor="html5-text-input" className="col-md-2 col-form-label">폴더</label>
                                     <div className="col-md-10">
-                                        <input className="form-control" type="text" name="authDir" id=""/>
+                                        <input className="form-control" type="text" name="authDir" id="" title="폴더"
+                                               required={true}/>
                                     </div>
                                 </div>
                                 <div className="mb-3 row">
                                     <label htmlFor="html5-text-input" className="col-md-2 col-form-label">파일 경로</label>
                                     <div className="col-md-10">
-                                        <input className="form-control" type="text" name="filePath" id=""/>
+                                        <input className="form-control" type="text" name="filePath" id="" title="파일 경로"
+                                               required={true}/>
                                     </div>
                                 </div>
                                 <div className="mb-3 row">
                                     <label htmlFor="html5-text-input" className="col-md-2 col-form-label">순서</label>
                                     <div className="col-md-10">
-                                        <input className="form-control" type="number" name="sortOrder" id=""/>
+                                        <input className="form-control" type="number" name="sortOrder" id="" title="순서"
+                                               required={true}/>
                                     </div>
                                 </div>
                                 <div className="mb-3 row">
                                     <label htmlFor="html5-text-input" className="col-md-2 col-form-label">설명</label>
                                     <div className="col-md-10">
-                                        <input className="form-control" type="text" name="etc" id=""/>
+                                        <input className="form-control" type="text" name="etc" id="" title="설명"
+                                               required={true}/>
                                     </div>
                                 </div>
                                 <div className="mb-3 row">
                                     <label htmlFor="html5-text-input" className="col-md-2 col-form-label">화면 여부</label>
                                     <div className="col-md-10">
-                                        <select id="defaultSelect" className="form-select" name="displayYn">
+                                        <select id="defaultSelect" className="form-select" name="displayYn"
+                                                title="화면 여부" required={true}>
                                             <option value="Y">표시</option>
                                             <option value="N">미표시</option>
                                         </select>
@@ -209,7 +260,7 @@ const CmsMenuMgmtListPage = ({leftMenuInfo, filePath}) => {
                                         <button type="button" className="btn btn-secondary mx-1"
                                                 onClick={addNewMenu}>추가
                                         </button>
-                                        <button type="button" className="btn btn-primary">저장</button>
+                                        <button type="button" className="btn btn-primary" onClick={proc}>저장</button>
                                     </div>
                                 </div>
                             </form>
