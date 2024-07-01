@@ -1,4 +1,4 @@
-const Header = () => {
+const Header = (props) => {
     const logout = () => {
         localStorage.removeItem('Authorization');
         window.location.reload();
@@ -9,7 +9,7 @@ const Header = () => {
         <div
             className="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0   d-xl-none ">
             <a className="nav-item nav-link px-0 me-xl-4"
-               href="javascript:void(0)">
+               >
                 <i className="bx bx-menu bx-sm"></i>
             </a>
         </div>
@@ -29,7 +29,7 @@ const Header = () => {
                 </li>
                 <li className="nav-item navbar-dropdown dropdown-user dropdown">
                     <a className="nav-link dropdown-toggle hide-arrow"
-                       href="javascript:void(0);" data-bs-toggle="dropdown"
+                        data-bs-toggle="dropdown"
                        aria-expanded="false">
                         <div className="avatar avatar-online">
                             <img src="../assets/img/avatars/1.png" alt=""
@@ -88,7 +88,7 @@ const Header = () => {
                         </li>
                         <li>
                             <a className="dropdown-item"
-                               href="javascript:void(0);">
+                               >
                                 <i className="bx bx-power-off me-2"></i>
                                 <span className="align-middle" onClick={logout}>Log Out</span>
                             </a>

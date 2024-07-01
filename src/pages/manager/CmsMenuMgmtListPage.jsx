@@ -25,14 +25,8 @@ const ManagerMgmtListPage = ({leftMenuInfo, filePath}) => {
             return tableResult.content.map((row, index) => {
                 let rowNum = (tableResult.totalElements - tableResult.totalPages) * (tableResult.number + index + 1);
                 return <tr className="cursor-pointer" id={row.managerSeq} onClick={goView}>
-                    <th scope="row">{rowNum}</th>
-                    <td>{row.managerNm}</td>
-                    <td>{row.managerId}</td>
-                    <td>{row.managerStatus}</td>
-                    <td>{row.useYn == 'Y' ? '사용' : '미사용'}</td>
-                    <td>{row.lastLoginDate}</td>
-                    <td>{row.regDate}</td>
-                </tr>;
+                           <th scope="row">{rowNum}</th>
+                       </tr>;
             }).reverse();
         }
     }
@@ -47,7 +41,6 @@ const ManagerMgmtListPage = ({leftMenuInfo, filePath}) => {
             '관리자 이름',
             '아이디(이메일)',
             '관리자 상태',
-            '사용 여부',
             '마지막 로그인 일',
             '생성일'
         ]}

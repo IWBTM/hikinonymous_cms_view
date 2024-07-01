@@ -7,8 +7,8 @@ const Table = ({leftMenuInfo, columnList, tableResult, filePath, renderRowCallba
     const navigate = useNavigate();
 
     const renderColumn = () => {
-        return columnList.map(column => {
-            return <th>{column}</th>;
+        return columnList.map((column, index) => {
+            return <th key={index}>{column}</th>;
         });
     }
 

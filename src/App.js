@@ -21,7 +21,7 @@ import './assets/libs/popper/popper';
 
 import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
-import TablePage from "./pages/manager/ManagerMgmtListPage";
+import ManagerMgmtListPage from "./pages/manager/ManagerMgmtListPage";
 import NotFound from "./pages/NotFound";
 
 import LoginPage from "./pages/account/LoginPage";
@@ -31,11 +31,12 @@ import {useEffect, useState} from "react";
 import api from "./api/api";
 import ManagerMgmtViewPage from "./pages/manager/ManagerMgmtViewPage";
 import Header from "./layout/Header";
+import CmsMenuMgmtListPage from "./pages/manager/CmsMenuMgmtListPage";
+import CmsMenuMgmtViewPage from "./pages/manager/CmsMenuMgmtViewPage";
 
 function App() {
 
     const [ leftMenuList, setLeftMenuList ] = useState([]);
-    const [ currentMenu, setCurrentMenu ] = useState({});
 
     useEffect(() => {
         const getMenuList = async () => {
@@ -88,7 +89,7 @@ function App() {
                                 path={menu.filePath}
                                 id={menu.cmsMenuSeq}
                                 element={
-                                    <TablePage
+                                    <ManagerMgmtListPage
                                         leftMenuInfo={{
                                                 parentNm: leftMenu.menuNm,
                                                 childNm: menu.menuNm
@@ -106,6 +107,39 @@ function App() {
                                 id={menu.cmsMenuSeq + '-view'}
                                 element={
                                     <ManagerMgmtViewPage
+                                        leftMenuInfo={{
+                                            parentNm: leftMenu.menuNm,
+                                            childNm: menu.menuNm
+                                        }}
+                                    />
+                                }
+                            />
+                        );
+                    }
+                    case 'CMS_MENU_MANAGEMENT': {
+                        childPages.push(
+                            <Route
+                                path={menu.filePath}
+                                id={menu.cmsMenuSeq}
+                                element={
+                                    <CmsMenuMgmtListPage
+                                        leftMenuInfo={{
+                                            parentNm: leftMenu.menuNm,
+                                            childNm: menu.menuNm
+                                        }}
+                                        filePath={
+                                            menu.filePath
+                                        }
+                                    />
+                                }
+                            />
+                        );
+                        childPages.push(
+                            <Route
+                                path={menu.filePath.substring(0, menu.filePath.lastIndexOf('list')) + 'view'}
+                                id={menu.cmsMenuSeq + '-view'}
+                                element={
+                                    <CmsMenuMgmtViewPage
                                         leftMenuInfo={{
                                             parentNm: leftMenu.menuNm,
                                             childNm: menu.menuNm

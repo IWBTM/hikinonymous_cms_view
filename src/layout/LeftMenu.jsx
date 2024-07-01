@@ -99,7 +99,7 @@ const LeftMenu = ({leftMenuList}) => {
                             <span className="app-brand-text demo menu-text fw-bolder ms-2">Hikinonymous</span>
                         </a>
 
-                        <a href="javascript:void(0);" className="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
+                        <a  className="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
                             <i className="bx bx-chevron-left bx-sm align-middle"></i>
                         </a>
                     </div>

@@ -4,7 +4,7 @@ const Pagination = ({tableResult}) => {
             {
                 !tableResult.first ?
                     <li className="page-item first">
-                        <a className="page-link" href="javascript:void(0);">
+                        <a className="page-link" >
                             <i className="tf-icon bx bx-chevrons-left"></i>
                         </a>
                     </li> : ''
@@ -12,7 +12,7 @@ const Pagination = ({tableResult}) => {
             {
                 !((tableResult.number + 1 - 1) < 1) ?
                     <li className="page-item prev">
-                        <a className="page-link" href="javascript:void(0);">
+                        <a className="page-link" >
                             <i className="tf-icon bx bx-chevron-left"></i>
                         </a>
                     </li> : ''
@@ -20,34 +20,34 @@ const Pagination = ({tableResult}) => {
             {
                 !((tableResult.number + 1 - 2) < 1) ?
                     <li className="page-item">
-                        <a className="page-link" href="javascript:void(0);">{tableResult.number + 1 - 2}</a>
+                        <a className="page-link" >{tableResult.number + 1 - 2}</a>
                     </li> : ''
             }
             {
                 !((tableResult.number + 1 - 1) < 1) ?
                     <li className="page-item">
-                        <a className="page-link" href="javascript:void(0);">{tableResult.number + 1 - 1}</a>
+                        <a className="page-link" >{tableResult.number + 1 - 1}</a>
                     </li> : ''
             }
             <li className="page-item active">
-                <a className="page-link" href="javascript:void(0);">{tableResult.number + 1}</a>
+                <a className="page-link" >{tableResult.number + 1}</a>
             </li>
             {
                 !((tableResult.number + 1 + 1) > tableResult.totalPages) ?
                     <li className="page-item">
-                        <a className="page-link" href="javascript:void(0);">{tableResult.number + 1 + 1}</a>
+                        <a className="page-link" >{tableResult.number + 1 + 1}</a>
                     </li> : ''
             }
             {
                 !((tableResult.number + 1 + 2) > tableResult.totalPages) ?
                     <li className="page-item">
-                        <a className="page-link" href="javascript:void(0);">{tableResult.number + 1 + 2}</a>
+                        <a className="page-link" >{tableResult.number + 1 + 2}</a>
                     </li> : ''
             }
             {
                 !((tableResult.number + 1 + 1) > tableResult.totalPages) ?
                     <li className="page-item next">
-                        <a className="page-link" href="javascript:void(0);">
+                        <a className="page-link" >
                             <i className="tf-icon bx bx-chevron-right"></i>
                         </a>
                     </li> : ''
@@ -55,7 +55,7 @@ const Pagination = ({tableResult}) => {
             {
                 !tableResult.last ?
                     <li className="page-item last">
-                        <a className="page-link" href="javascript:void(0);">
+                        <a className="page-link" >
                             <i className="tf-icon bx bx-chevrons-right"></i>
                         </a>
                     </li> : ''
