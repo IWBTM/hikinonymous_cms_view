@@ -21,15 +21,16 @@ import './assets/libs/popper/popper';
 
 import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
-import TablePage from "./pages/TablePage";
+import TablePage from "./pages/manager/ManagerMgmtListPage";
 import NotFound from "./pages/NotFound";
 
 import LoginPage from "./pages/account/LoginPage";
 import VerifyPwd from "./pages/account/VerifyPwd";
-import LeftMenu from "./pages/layout/LeftMenu";
+import LeftMenu from "./layout/LeftMenu";
 import {useEffect, useState} from "react";
 import api from "./api/api";
-import MenuTitle from "./pages/layout/MenuTitle";
+import ManagerMgmtViewPage from "./pages/manager/ManagerMgmtViewPage";
+import Header from "./layout/Header";
 
 function App() {
 
@@ -92,16 +93,23 @@ function App() {
                                                 parentNm: leftMenu.menuNm,
                                                 childNm: menu.menuNm
                                         }}
-                                        columnList={[
-                                            '관리자 이름',
-                                            '아이디(이메일)',
-                                            '관리자 상태',
-                                            '마지막 로그인 일',
-                                            '생성일'
-                                        ]}
                                         filePath={
                                             menu.filePath
                                         }
+                                    />
+                                }
+                            />
+                        );
+                        childPages.push(
+                            <Route
+                                path={menu.filePath.substring(0, menu.filePath.lastIndexOf('list')) + 'view'}
+                                id={menu.cmsMenuSeq + '-view'}
+                                element={
+                                    <ManagerMgmtViewPage
+                                        leftMenuInfo={{
+                                            parentNm: leftMenu.menuNm,
+                                            childNm: menu.menuNm
+                                        }}
                                     />
                                 }
                             />
@@ -128,6 +136,7 @@ function App() {
                                     <div className="layout-container">
                                         <LeftMenu leftMenuList={leftMenuList}/>
                                         <div className="layout-page">
+                                            <Header/>
                                             <Routes>
                                                 <Route path="/cms/dashboard" element={<Dashboard/>}/>
                                                 {renderPages()}

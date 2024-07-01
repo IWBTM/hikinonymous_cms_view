@@ -3,11 +3,8 @@ import api from "../../api/api";
 import {useNavigate} from "react-router-dom";
 
 const LoginPage = (props) => {
-    const [ isSubmit, setIsSubmit ] = useState(false);
     const [ email, setEmail ] = useState('');
     const [ pwd, setPwd ] = useState('');
-
-    const navigate = useNavigate();
 
     const loginProc = async () => {
         const response = await api.post('/cms/login/proc', JSON.stringify({
@@ -16,9 +13,9 @@ const LoginPage = (props) => {
         }))
         const responseDto = response.data;
         alert(responseDto.message);
-        if (responseDto.code == 200) {
+        if (responseDto.code === 200) {
             localStorage.setItem('Authorization', responseDto.data);
-            navigate('/main1');
+            window.location.href = '/cms/dashboard';
         }
     }
 

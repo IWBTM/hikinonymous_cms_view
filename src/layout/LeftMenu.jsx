@@ -1,4 +1,4 @@
-import {ScrollBar} from "../../assets/libs/perfect-scrollbar/perfect-scrollbar";
+import {ScrollBar} from "../assets/libs/perfect-scrollbar/perfect-scrollbar";
 import {useNavigate} from "react-router-dom";
 
 const LeftMenu = ({leftMenuList}) => {
