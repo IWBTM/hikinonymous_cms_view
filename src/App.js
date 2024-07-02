@@ -32,7 +32,6 @@ import api from "./api/api";
 import ManagerMgmtViewPage from "./pages/manager/ManagerMgmtViewPage";
 import Header from "./layout/Header";
 import CmsMenuMgmtListPage from "./pages/manager/CmsMenuMgmtListPage";
-import CmsMenuMgmtViewPage from "./pages/manager/CmsMenuMgmtViewPage";
 
 function App() {
 
@@ -115,7 +114,7 @@ function App() {
                                 }
                             />
                         );
-                    } break;
+                    }
                     case 'CMS_MENU_MANAGEMENT': {
                         childPages.push(
                             <Route
@@ -134,21 +133,7 @@ function App() {
                                 }
                             />
                         );
-                        childPages.push(
-                            <Route
-                                path={menu.filePath.substring(0, menu.filePath.lastIndexOf('list')) + 'view'}
-                                id={menu.cmsMenuSeq + '-view'}
-                                element={
-                                    <CmsMenuMgmtViewPage
-                                        leftMenuInfo={{
-                                            parentNm: leftMenu.menuNm,
-                                            childNm: menu.menuNm
-                                        }}
-                                    />
-                                }
-                            />
-                        );
-                    }break;
+                    }
                 }
             });
         });

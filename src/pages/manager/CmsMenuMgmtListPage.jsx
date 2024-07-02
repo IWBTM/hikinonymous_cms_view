@@ -120,7 +120,7 @@ const CmsMenuMgmtListPage = ({leftMenuInfo, filePath}) => {
                 getChildTableList(requestDto.authDir);
             }
             clearWriteForm();
-            alert('저장 되었습니다.');
+            alert('저장 되었습니다.\n 저장된 메뉴는 새로 고침 후 적용 됩니다.');
         } else {
             console.log(responseDto.message)
         }
@@ -227,8 +227,7 @@ const CmsMenuMgmtListPage = ({leftMenuInfo, filePath}) => {
                                 <div className="mb-3 row">
                                     <label htmlFor="html5-text-input" className="col-md-2 col-form-label">파일 경로</label>
                                     <div className="col-md-10">
-                                        <input className="form-control" type="text" name="filePath" id="" title="파일 경로"
-                                               required={true}/>
+                                        <input className="form-control" type="text" name="filePath" id="" title="파일 경로"/>
                                     </div>
                                 </div>
                                 <div className="mb-3 row">
@@ -241,8 +240,7 @@ const CmsMenuMgmtListPage = ({leftMenuInfo, filePath}) => {
                                 <div className="mb-3 row">
                                     <label htmlFor="html5-text-input" className="col-md-2 col-form-label">설명</label>
                                     <div className="col-md-10">
-                                        <input className="form-control" type="text" name="etc" id="" title="설명"
-                                               required={true}/>
+                                        <input className="form-control" type="text" name="etc" id="" title="설명"/>
                                     </div>
                                 </div>
                                 <div className="mb-3 row">
