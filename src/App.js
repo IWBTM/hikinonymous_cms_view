@@ -33,6 +33,8 @@ import ManagerMgmtViewPage from "./pages/manager/ManagerMgmtViewPage";
 import Header from "./layout/Header";
 import CmsMenuMgmtListPage from "./pages/manager/CmsMenuMgmtListPage";
 import AuthMgmtListPage from "./pages/manager/AuthMgmtListPage";
+import BannerMgmtListPage from "./pages/site/BannerMgmtListPage";
+import BannerMgmtViewPage from "./pages/site/BannerMgmtViewPage";
 
 function App() {
 
@@ -85,80 +87,76 @@ function App() {
             leftMenu.children.map(menu => {
                 switch (menu.menuCode) {
                     case 'MANAGER_MANAGEMENT': {
-                        childPages.push(
-                            <Route
-                                path={menu.filePath}
-                                id={menu.cmsMenuSeq}
-                                element={
-                                    <ManagerMgmtListPage
-                                        leftMenuInfo={{
-                                                parentNm: leftMenu.menuNm,
-                                                childNm: menu.menuNm
-                                        }}
-                                        filePath={
-                                            menu.filePath
-                                        }
-                                    />
-                                }
-                            />
-                        );
-                        childPages.push(
-                            <Route
-                                path={menu.filePath.substring(0, menu.filePath.lastIndexOf('list')) + 'view'}
-                                id={menu.cmsMenuSeq + '-view'}
-                                element={
-                                    <ManagerMgmtViewPage
-                                        leftMenuInfo={{
-                                            parentNm: leftMenu.menuNm,
-                                            childNm: menu.menuNm
-                                        }}
-                                    />
-                                }
-                            />
-                        );
+                        setManagerMgmtRoute(childPages, leftMenu, menu, ManagerMgmtListPage, ManagerMgmtViewPage);
                     }
                     case 'CMS_MENU_MANAGEMENT': {
-                        childPages.push(
-                            <Route
-                                path={menu.filePath}
-                                id={menu.cmsMenuSeq}
-                                element={
-                                    <CmsMenuMgmtListPage
-                                        leftMenuInfo={{
-                                            parentNm: leftMenu.menuNm,
-                                            childNm: menu.menuNm
-                                        }}
-                                        filePath={
-                                            menu.filePath
-                                        }
-                                    />
-                                }
-                            />
-                        );
+                        setCmsMenuMgmtRoute(childPages, leftMenu, menu, CmsMenuMgmtListPage);
                     }
                     case 'ADMIN_AUTH_MANAGEMENT': {
-                        childPages.push(
-                            <Route
-                                path={menu.filePath}
-                                id={menu.cmsMenuSeq}
-                                element={
-                                    <AuthMgmtListPage
-                                        leftMenuInfo={{
-                                            parentNm: leftMenu.menuNm,
-                                            childNm: menu.menuNm
-                                        }}
-                                        filePath={
-                                            menu.filePath
-                                        }
-                                    />
-                                }
-                            />
-                        );
+                        setMenuAuthMgmtRoute(childPages, leftMenu, menu, AuthMgmtListPage);
+                    }
+                    case 'BANNER_MANAGEMENT': {
+                        setBannerMgmtRoute(childPages, leftMenu, menu, BannerMgmtListPage, BannerMgmtViewPage);
                     }
                 }
             });
         });
         return childPages;
+    }
+    
+    const setManagerMgmtRoute = (childPages, leftMenu, menu, ListPageComponent, ViewPageComponent) => {
+        setListPageRoute(childPages, leftMenu, menu, ListPageComponent);
+        setViewPageRoute(childPages, leftMenu, menu, ViewPageComponent);
+    };
+
+    const setCmsMenuMgmtRoute = (childPages, leftMenu, menu, ListPageComponent) => {
+        setListPageRoute(childPages, leftMenu, menu, ListPageComponent);
+    };
+
+    const setMenuAuthMgmtRoute = (childPages, leftMenu, menu, ListPageComponent) => {
+        setListPageRoute(childPages, leftMenu, menu, ListPageComponent);
+    };
+
+    const setBannerMgmtRoute = (childPages, leftMenu, menu, ListPageComponent, ViewPageComponent) => {
+        setListPageRoute(childPages, leftMenu, menu, ListPageComponent);
+        setViewPageRoute(childPages, leftMenu, menu, ViewPageComponent);
+    };
+    
+    const setListPageRoute = (childPages, leftMenu, menu, ListPageComponent) => {
+        childPages.push(
+            <Route
+                path={menu.filePath}
+                id={menu.cmsMenuSeq}
+                element={
+                    <ListPageComponent
+                        leftMenuInfo={{
+                            parentNm: leftMenu.menuNm,
+                            childNm: menu.menuNm
+                        }}
+                        filePath={
+                            menu.filePath
+                        }
+                    />
+                }
+            />
+        );
+    }
+
+    const setViewPageRoute = (childPages, leftMenu, menu, ViewPageComponent) => {
+        childPages.push(
+            <Route
+                path={menu.filePath.substring(0, menu.filePath.lastIndexOf('list')) + 'view'}
+                id={menu.cmsMenuSeq + '-view'}
+                element={
+                    <ViewPageComponent
+                        leftMenuInfo={{
+                            parentNm: leftMenu.menuNm,
+                            childNm: menu.menuNm
+                        }}
+                    />
+                }
+            />
+        );
     }
 
     const isLoggedIn = () => {

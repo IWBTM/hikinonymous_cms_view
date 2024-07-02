@@ -35,11 +35,15 @@ const LeftMenu = ({leftMenuList}) => {
     }
 
     const isParentActive = (menuAuthDir) => {
-        return menuAuthDir.indexOf(getAuthDirInPath()) > -1;
+        return !checkIsDashboard() ? menuAuthDir.indexOf(getAuthDirInPath()) > -1 : "";
     }
 
     const isChildActive = (menuThirdPath) => {
-        return getThirdPath(menuThirdPath).indexOf(getThirdPath(location.pathname)) > -1;
+        return !checkIsDashboard() ? getThirdPath(menuThirdPath).indexOf(getThirdPath(location.pathname)) > -1 : "";
+    }
+
+    const checkIsDashboard = () => {
+        return location.pathname.indexOf('dashboard') > -1;
     }
 
     const renderLeftMenu = () => {
