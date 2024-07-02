@@ -169,37 +169,38 @@ function App() {
             <BrowserRouter>
                 <Routes>
                     <Route path="*" element={
-                        <>
-                            <PrivateRoute isLoggedIn={isLoggedIn}>
-                                <div className="layout-wrapper layout-content-navbar">
-                                    <div className="layout-container">
-                                        <LeftMenu leftMenuList={leftMenuList}/>
-                                        <div className="layout-page">
-                                            <Header/>
-                                            <Routes>
-                                                <Route path="/cms/dashboard" element={<Dashboard/>}/>
-                                                {renderPages()}
-                                                <Route path="*" element={<NotFound/>}></Route>
-                                            </Routes>
-                                        </div>
-                                    </div>
-                                </div>
-                            </PrivateRoute>
-                            <Routes>
-                                <Route path="/cms/console/login" element={<LoginPage/>}></Route>
-                                <Route path="/cms/verify/pwd" element={<VerifyPwd/>}></Route>
-                                <Route path="*" element={<NotFound/>}></Route>
-                            </Routes>
-                        </>
+                        <PrivateRoute isLoggedIn={isLoggedIn}/>
                     }/>
                 </Routes>
             </BrowserRouter>
         </div>
     );
-}
 
-function PrivateRoute({children, isLoggedIn}) {
-    return isLoggedIn() ? children : <Navigate to="/cms/console/login"/>;
+    function PrivateRoute({isLoggedIn}) {
+        return isLoggedIn() ?
+            (
+                <div className="layout-wrapper layout-content-navbar">
+                    <div className="layout-container">
+                        <LeftMenu leftMenuList={leftMenuList}/>
+                        <div className="layout-page">
+                            <Header/>
+                            <Routes>
+                                <Route path="/cms/dashboard" element={<Dashboard/>}/>
+                                {renderPages()}
+                                <Route path="*" element={<NotFound/>}></Route>
+                            </Routes>
+                        </div>
+                    </div>
+                </div>
+            ) :
+            (
+                <Routes>
+                    <Route path="/cms/console/login" element={<LoginPage/>}></Route>
+                    <Route path="/cms/verify/pwd" element={<VerifyPwd/>}></Route>
+                    <Route path="*" element={<NotFound/>}></Route>
+                </Routes>
+            );
+    }
 }
 
 export default App;

@@ -215,9 +215,10 @@ const ManagerMgmtViewPage = ({leftMenuInfo}) => {
                                     {
                                         managerStatusList.map((managerStatus, index) => {
                                             return <option
-                                                key={index}
-                                                value={managerStatus.codeSeq}>{managerStatus.codeNm}
-                                            </option>;
+                                                        selected={managerDto.managerStatusSeq == managerStatus.codeSeq}
+                                                        key={index}
+                                                        value={managerStatus.codeSeq}>{managerStatus.codeNm}
+                                                    </option>;
                                         })
                                     }
                                 </select>
@@ -226,8 +227,8 @@ const ManagerMgmtViewPage = ({leftMenuInfo}) => {
                                 <label htmlFor="html5-search-input" className="col-md-2 col-form-label">사용 여부</label>
                                 <select className="col-md-10 form-select" id="exampleFormControlSelect1"
                                         aria-label="Default select example" name="useYn" title="사용 여부" required={true}>
-                                    <option value='Y'>사용</option>
-                                    <option value='N'>미사용</option>
+                                    <option selected={managerDto.useYn == 'Y'} value='Y'>사용</option>
+                                    <option selected={managerDto.useYn == 'N'} value='N'>미사용</option>
                                 </select>
                             </div>
                             <div className="mb-3 row">
@@ -236,8 +237,8 @@ const ManagerMgmtViewPage = ({leftMenuInfo}) => {
                                 <select className="col-md-10 form-select" id="exampleFormControlSelect1"
                                         aria-label="Default select example" name="superYn" title="슈퍼 관리자 여부"
                                         required={true}>
-                                    <option value='Y'>슈퍼 관리자</option>
-                                    <option value='N'>일반 관리자</option>
+                                    <option selected={managerDto.superYn == 'Y'} value='Y'>슈퍼 관리자</option>
+                                    <option selected={managerDto.superYn == 'N'} value='N'>일반 관리자</option>
                                 </select>
                             </div>
                         </form>
