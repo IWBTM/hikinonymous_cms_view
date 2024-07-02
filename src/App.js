@@ -51,6 +51,7 @@ function App() {
                             cmsMenuSeq: resultList[i].cmsMenuSeq,
                             menuNm: resultList[i].menuNm,
                             menuCode: resultList[i].menuCode,
+                            authDir: resultList[i].authDir,
                             filePath: resultList[i].filePath,
                             isHaveChildren: false,
                             children: []

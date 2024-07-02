@@ -1,8 +1,8 @@
 import {ScrollBar} from "../assets/libs/perfect-scrollbar/perfect-scrollbar";
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 
 const LeftMenu = ({leftMenuList}) => {
-
+    const location = useLocation();
     const navigate = useNavigate();
 
     const handleIsOpen = (e) => {
@@ -17,9 +17,34 @@ const LeftMenu = ({leftMenuList}) => {
         }
     }
 
+    const getAuthDirInPath = () => {
+        let pathName = location.pathname;
+        let authDir = pathName.substring(pathName.indexOf('/') + 1, pathName.length);
+        authDir = authDir.substring(authDir.indexOf('/') + 1, authDir.length);
+        authDir = authDir.substring(0, authDir.indexOf('/'));
+        return authDir;
+    }
+
+    const getThirdPath = (path) => {
+        let pathName = path;
+        pathName = pathName.substring(pathName.indexOf('/') + 1, pathName.length);
+        pathName = pathName.substring(pathName.indexOf('/') + 1, pathName.length);
+        pathName = pathName.substring(pathName.indexOf('/') + 1, pathName.length);
+        pathName = pathName.substring(0, pathName.indexOf('/'));
+        return pathName;
+    }
+
+    const isParentActive = (menuAuthDir) => {
+        return menuAuthDir.indexOf(getAuthDirInPath()) > -1;
+    }
+
+    const isChildActive = (menuThirdPath) => {
+        return getThirdPath(menuThirdPath).indexOf(getThirdPath(location.pathname)) > -1;
+    }
+
     const renderLeftMenu = () => {
         return leftMenuList.map(leftMenu => {
-                return <li className="menu-item" key={leftMenu.cmsMenuSeq}>
+                return <li className={`menu-item ${isParentActive(leftMenu.authDir) ? "active" : ""}`} key={leftMenu.cmsMenuSeq}>
                             <a href={leftMenu.filePath} className={`menu-link cursor-pointer ${leftMenu.isHaveChildren ? "menu-toggle" : ""}`} onClick={handleIsOpen}>
                                 <i className="menu-icon tf-icons bx bx-layout"></i>
                                 <div data-i18n={leftMenu.menuNm}>{leftMenu.menuNm}</div>
@@ -27,7 +52,7 @@ const LeftMenu = ({leftMenuList}) => {
 
                             <ul className="menu-sub">
                                 {leftMenu.children.map(menu => {
-                                    return <li className="menu-item" key={menu.cmsMenuSeq}>
+                                    return <li className={`menu-item ${isChildActive(menu.filePath) ? "active" : ""}`} key={menu.cmsMenuSeq}>
                                                 <a href={menu.filePath} className="menu-link cursor-pointer" onClick={handleIsOpen}>
                                                     <div data-i18n={menu.menuNm}>{menu.menuNm}</div>
                                                 </a>
