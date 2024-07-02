@@ -59,7 +59,7 @@ const ManagerMgmtListPage = ({leftMenuInfo, filePath}) => {
             </div>
             <Table
                 columnList={[
-                    '관리자 이름',
+                    '관리자명',
                     '아이디(이메일)',
                     '관리자 상태',
                     '사용 여부',

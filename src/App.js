@@ -32,6 +32,7 @@ import api from "./api/api";
 import ManagerMgmtViewPage from "./pages/manager/ManagerMgmtViewPage";
 import Header from "./layout/Header";
 import CmsMenuMgmtListPage from "./pages/manager/CmsMenuMgmtListPage";
+import AuthMgmtListPage from "./pages/manager/AuthMgmtListPage";
 
 function App() {
 
@@ -122,6 +123,25 @@ function App() {
                                 id={menu.cmsMenuSeq}
                                 element={
                                     <CmsMenuMgmtListPage
+                                        leftMenuInfo={{
+                                            parentNm: leftMenu.menuNm,
+                                            childNm: menu.menuNm
+                                        }}
+                                        filePath={
+                                            menu.filePath
+                                        }
+                                    />
+                                }
+                            />
+                        );
+                    }
+                    case 'ADMIN_AUTH_MANAGEMENT': {
+                        childPages.push(
+                            <Route
+                                path={menu.filePath}
+                                id={menu.cmsMenuSeq}
+                                element={
+                                    <AuthMgmtListPage
                                         leftMenuInfo={{
                                             parentNm: leftMenu.menuNm,
                                             childNm: menu.menuNm
