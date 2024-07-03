@@ -73,7 +73,7 @@ const CmsMenuMgmtListPage = ({leftMenuInfo, filePath}) => {
         if (!parentTableResult.empty && parentTableResult.content) {
             return parentTableResult.content.map((row, index) => {
                 let rowNum = (parentTableResult.totalElements - parentTableResult.totalPages) * (parentTableResult.number + index + 1);
-                return <tr className="cursor-pointer" id={row.managerSeq} authDir={row.authDir} bindObj={JSON.stringify(row)} onClick={clickParentRow}>
+                return <tr className="cursor-pointer" id={row.managerSeq} authDir={row.authDir} bindObj={JSON.stringify(row)} onClick={clickParentRow} key={index}>
                     <th scope="row">{rowNum}</th>
                     <th scope="row">{row.menuNm}</th>
                     <th scope="row">{row.authDir}</th>
@@ -88,7 +88,7 @@ const CmsMenuMgmtListPage = ({leftMenuInfo, filePath}) => {
         if (!childTableResult.empty && childTableResult.content) {
             return childTableResult.content.map((row, index) => {
                 let rowNum = (childTableResult.totalElements - childTableResult.totalPages) * (childTableResult.number + index + 1);
-                return <tr className="cursor-pointer" id={row.managerSeq} bindObj={JSON.stringify(row)} onClick={clickChildRow}>
+                return <tr className="cursor-pointer" id={row.managerSeq} bindObj={JSON.stringify(row)} onClick={clickChildRow} key={index}>
                     <th scope="row">{rowNum}</th>
                     <th scope="row">{row.menuNm}</th>
                     <th scope="row">{row.authDir}</th>

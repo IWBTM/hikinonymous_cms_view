@@ -7,6 +7,11 @@ const Table = ({leftMenuInfo, columnList, isOnHeader, renderRowCallback}) => {
         });
     }
 
+    const renderRow = () => {
+        const rows = renderRowCallback();
+        if (rows && rows.length > 0) return renderRowCallback();
+    }
+
     return (
             <div className="card">
                 {
@@ -21,8 +26,8 @@ const Table = ({leftMenuInfo, columnList, isOnHeader, renderRowCallback}) => {
                             {renderColumn()}
                         </tr>
                         </thead>
-                        <tbody className="table-border-bottom-0">
-                        {renderRowCallback()}
+                        <tbody>
+                            {renderRow()}
                         </tbody>
                     </table>
                 </div>

@@ -30,7 +30,7 @@ const AuthMgmtListPage = ({leftMenuInfo, filePath}) => {
         if (!managerTableResult.empty && managerTableResult.content) {
             return managerTableResult.content.map((row, index) => {
                 let rowNum = (managerTableResult.totalElements - managerTableResult.totalPages) * (managerTableResult.number + index + 1);
-                return <tr className="cursor-pointer" id={row.managerSeq} bindObj={JSON.stringify(row)} onClick={clickManagerRow}>
+                return <tr className="cursor-pointer" id={row.managerSeq} bindObj={JSON.stringify(row)} onClick={clickManagerRow} key={index}>
                     <th scope="row">{rowNum}</th>
                     <td>{row.managerNm}</td>
                     <td>{row.managerId}</td>
@@ -139,7 +139,7 @@ const AuthMgmtListPage = ({leftMenuInfo, filePath}) => {
             return parentAuthTableResult.map((row, index) => {
                 let rowNum = index + 1;
                 return <tr className="cursor-pointer" bindObj={JSON.stringify(row)}
-                           onClick={clickParentAuthRow}>
+                           onClick={clickParentAuthRow} key={index}>
                     <th scope="row">{rowNum}</th>
                     <th scope="row">{row.menuNm}</th>
                     <th scope="row">{getAuthTypesText(row.authTypes)}</th>
@@ -152,7 +152,7 @@ const AuthMgmtListPage = ({leftMenuInfo, filePath}) => {
         if (childAuthTableResult.length && !childAuthTableResult.empty) {
             return childAuthTableResult.map((row, index) => {
                 let rowNum = index + 1;
-                return <tr className="cursor-pointer" bindObj={JSON.stringify(row)} onClick={clickChildRow}>
+                return <tr className="cursor-pointer" bindObj={JSON.stringify(row)} onClick={clickChildRow} key={index}>
                     <th scope="row">{rowNum}</th>
                     <th scope="row">{row.menuNm}</th>
                     <th scope="row">{getAuthTypesText(row.authTypes)}</th>
@@ -166,7 +166,7 @@ const AuthMgmtListPage = ({leftMenuInfo, filePath}) => {
             return parentTableResult.map((row, index) => {
                 let rowNum = index + 1;
                 return <tr className="cursor-pointer" bindObj={JSON.stringify(row)}
-                           onClick={clickParentRow}>
+                           onClick={clickParentRow} key={index}>
                     <th scope="row">{rowNum}</th>
                     <th scope="row">{row.menuNm}</th>
                 </tr>;
@@ -178,7 +178,7 @@ const AuthMgmtListPage = ({leftMenuInfo, filePath}) => {
         if (childTableResult.length && !childTableResult.empty) {
             return childTableResult.map((row, index) => {
                 let rowNum = index + 1;
-                return <tr className="cursor-pointer" bindObj={JSON.stringify(row)} onClick={clickChildRow}>
+                return <tr className="cursor-pointer" bindObj={JSON.stringify(row)} onClick={clickChildRow} key={index}>
                     <th scope="row">{rowNum}</th>
                     <th scope="row">{row.menuNm}</th>
                 </tr>;

@@ -26,7 +26,7 @@ const ManagerMgmtListPage = ({leftMenuInfo, filePath}) => {
         if (!tableResult.empty && tableResult.content) {
             return tableResult.content.map((row, index) => {
                 let rowNum = (tableResult.totalElements - tableResult.totalPages) * (tableResult.number + index + 1);
-                return <tr className="cursor-pointer" id={row.bannerSeq} onClick={goView}>
+                return <tr className="cursor-pointer" id={row.bannerSeq} onClick={goView} key={index}>
                     <th scope="row">{rowNum}</th>
                     <td>{row.title}</td>
                     <td>{row.position.codeNm}</td>
@@ -68,7 +68,7 @@ const ManagerMgmtListPage = ({leftMenuInfo, filePath}) => {
             />
 
             <Pagination tableResult={tableResult}/>
-            <div className="d-flex justify-content-end">
+            <div className="d-flex justify-content-end container-p-y">
                 <button type="button" className="btn btn-primary" onClick={goWrite}>등록</button>
             </div>
         </div>

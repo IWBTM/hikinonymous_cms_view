@@ -125,6 +125,7 @@ function App() {
     const setListPageRoute = (childPages, leftMenu, menu, ListPageComponent) => {
         childPages.push(
             <Route
+                key={menu.cmsMenuSeq}
                 path={menu.filePath}
                 id={menu.cmsMenuSeq}
                 element={
@@ -145,6 +146,7 @@ function App() {
     const setViewPageRoute = (childPages, leftMenu, menu, ViewPageComponent) => {
         childPages.push(
             <Route
+                key={menu.cmsMenuSeq}
                 path={menu.filePath.substring(0, menu.filePath.lastIndexOf('list')) + 'view'}
                 id={menu.cmsMenuSeq + '-view'}
                 element={
