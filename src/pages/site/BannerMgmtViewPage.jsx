@@ -12,8 +12,8 @@ const BannerMgmtViewPage = ({leftMenuInfo}) => {
     const [ positionList, setPositionList ] = useState([]);
     const [ bannerDto, setBannerDto ] = useState({});
 
-    const [ pwdChangeStep, setPwdChangeStep ] = useState(0);
-    const [ isValidPwd, setIsValidPwd ] = useState(true);
+    const [ selectedPcImageFile, setSelectedPcImageFile ] = useState(null);
+    const [ selectedMoImageFile, setSelectedMoImageFile ] = useState(null);
 
     const formRef = useRef();
 
@@ -28,6 +28,8 @@ const BannerMgmtViewPage = ({leftMenuInfo}) => {
             const response = await api.get(`${filePath}/${seq}`);
             const responseDto = response.data;
             if (responseDto.code === 200) {
+                setSelectedMoImageFile(responseDto.data.pcImage.fileFullPath);
+                setSelectedPcImageFile(responseDto.data.moImage.fileFullPath);
                 setBannerDto(responseDto.data);
             }
         }
@@ -60,7 +62,11 @@ const BannerMgmtViewPage = ({leftMenuInfo}) => {
         formData.forEach((value, key) => {
             requestDto[key] = value
         })
-        const response = await api.post(`${filePath.substring(0, filePath.lastIndexOf('view'))}proc`, JSON.stringify(requestDto));
+        const response = await api.post(`${filePath.substring(0, filePath.lastIndexOf('view'))}proc`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
 
         const responseDto = response.data;
         if (responseDto.code === 200) {
@@ -83,27 +89,23 @@ const BannerMgmtViewPage = ({leftMenuInfo}) => {
             }
         })
 
-        if (pwdChangeStep == 1 && !isValidPwd) {
-            isValid = false;
-            alert('비밀번호를 확인해주세요.');
-        }
         return isValid;
     }
 
-    const validPwd = (e) => {
-        const target = e.currentTarget;
-        if (target.value.length > 0) {
-            if (target.value !== document.getElementById('newPwd').value) {
-                setIsValidPwd(false);
-            } else {
-                setIsValidPwd(true);
-            }
-        }
-    }
+    const changedFile = (e) => {
+        const id = e.currentTarget.id;
+        const deviceType = id.substring(0, id.indexOf('ImageFile'));
 
-    const goStep = (e) => {
-        const step = e.currentTarget.value;
-        setPwdChangeStep(step);
+        const file = e.currentTarget.files[0];
+        let reader = new FileReader();
+        reader.onload = (e) => {
+            if (deviceType == 'pc') setSelectedPcImageFile(e.target.result);
+            if (deviceType == 'mo') setSelectedMoImageFile(e.target.result);
+        }
+        reader.readAsDataURL(file);
+        if (deviceType == 'pc') {
+            console.log('file:: ', file)
+        }
     }
 
     return <div className="container-xxl flex-grow-1 container-p-y">
@@ -164,13 +166,15 @@ const BannerMgmtViewPage = ({leftMenuInfo}) => {
                             <div className="mb-3 row">
                                 <label htmlFor="formFile" className="col-md-2 form-label">PC 이미지</label>
                                 <div className="col-md-10">
-                                    <input className="form-control" type="file" id="pcImage"/>
+                                    <input className="form-control" type="file" id="pcImageFile" name="pcImageFile" title="PC 이미지" required={true}  onChange={changedFile}/>
+                                    <img src={selectedPcImageFile} className={`w-100 my-3 ${!selectedPcImageFile ? "d-none" : ""}`}/>
                                 </div>
                             </div>
                             <div className={`${seq ? 'mb-5' : 'mb-2'} row`}>
                                 <label htmlFor="formFile" className="col-md-2 form-label">MOBILE 이미지</label>
                                 <div className="col-md-10">
-                                    <input className="form-control" type="file" id="moImage"/>
+                                    <input className="form-control" type="file" id="moImageFile" name="moImageFile" title="MOBILE 이미지" required={true} onChange={changedFile}/>
+                                    <img src={selectedMoImageFile} className={`w-100 my-3 ${!selectedMoImageFile ? "d-none" : ""}`}/>
                                 </div>
                             </div>
 
@@ -190,7 +194,7 @@ const BannerMgmtViewPage = ({leftMenuInfo}) => {
                                         <label htmlFor="html5-date-input"
                                                className="col-md-2 col-form-label">등록자</label>
                                         <div className="col-md-10">
-                                            <label className="col-form-label">{bannerDto.register.managerNm}</label>
+                                            <label className="col-form-label">{bannerDto.register}</label>
                                         </div>
                                     </div> : ''
                             }
