@@ -194,7 +194,7 @@ const BannerMgmtViewPage = ({leftMenuInfo}) => {
                                         <label htmlFor="html5-date-input"
                                                className="col-md-2 col-form-label">등록자</label>
                                         <div className="col-md-10">
-                                            <label className="col-form-label">{bannerDto.register}</label>
+                                            <label className="col-form-label">{bannerDto.register && bannerDto.register.managerNm}</label>
                                         </div>
                                     </div> : ''
                             }
