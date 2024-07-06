@@ -12,8 +12,8 @@ const BannerMgmtViewPage = ({leftMenuInfo}) => {
     const [ positionList, setPositionList ] = useState([]);
     const [ bannerDto, setBannerDto ] = useState({});
 
-    const [ selectedPcImageFile, setSelectedPcImageFile ] = useState(null);
-    const [ selectedMoImageFile, setSelectedMoImageFile ] = useState(null);
+    const [ selectedPcImageFile, setSelectedPcImageFile ] = useState({});
+    const [ selectedMoImageFile, setSelectedMoImageFile ] = useState({});
 
     const formRef = useRef();
 
@@ -28,9 +28,8 @@ const BannerMgmtViewPage = ({leftMenuInfo}) => {
             const response = await api.get(`${filePath}/${seq}`);
             const responseDto = response.data;
             if (responseDto.code === 200) {
-                console.log('uri:: ', )
-                setSelectedMoImageFile(`${responseDto.data.pcImage.fileApiPath}${responseDto.data.pcImage.fileInfoSeq}`);
-                setSelectedPcImageFile(`${responseDto.data.moImage.fileApiPath}${responseDto.data.moImage.fileInfoSeq}`);
+                setSelectedPcImageFile({filePath: `${responseDto.data.pcImage.fileApiPath}${responseDto.data.pcImage.fileInfoSeq}`, fileNm: responseDto.data.pcImage.fileOriNm});
+                setSelectedMoImageFile({filePath: `${responseDto.data.moImage.fileApiPath}${responseDto.data.moImage.fileInfoSeq}`, fileNm: responseDto.data.moImage.fileOriNm});
                 setBannerDto(responseDto.data);
             }
         }
@@ -100,12 +99,18 @@ const BannerMgmtViewPage = ({leftMenuInfo}) => {
         const file = e.currentTarget.files[0];
         let reader = new FileReader();
         reader.onload = (e) => {
-            if (deviceType == 'pc') setSelectedPcImageFile(e.target.result);
-            if (deviceType == 'mo') setSelectedMoImageFile(e.target.result);
+            if (deviceType == 'pc') setSelectedPcImageFile({filePath: e.target.result, fileNm: file.name});
+            if (deviceType == 'mo') setSelectedMoImageFile({filePath: e.target.result, fileNm: file.name});
         }
         reader.readAsDataURL(file);
-        if (deviceType == 'pc') {
-            console.log('file:: ', file)
+    }
+
+    const delImage = (e) => {
+        const id = e.currentTarget.id.toLowerCase();
+        if (id.indexOf('pc') > -1) {
+            setSelectedPcImageFile({});
+        } else if (id.indexOf('mo') > -1) {
+            setSelectedMoImageFile({});
         }
     }
 
@@ -167,15 +172,42 @@ const BannerMgmtViewPage = ({leftMenuInfo}) => {
                             <div className="mb-3 row">
                                 <label htmlFor="formFile" className="col-md-2 form-label">PC 이미지</label>
                                 <div className="col-md-10">
-                                    <input className="form-control" type="file" id="pcImageFile" name="pcImageFile" title="PC 이미지" required={true}  onChange={changedFile}/>
-                                    <img src={selectedPcImageFile} className={`w-100 my-3 ${!selectedPcImageFile ? "d-none" : ""}`}/>
+                                    {
+                                        selectedPcImageFile.fileNm ?
+                                            <label className="col-form-label mx-2">{selectedPcImageFile.fileNm} </label> : ''
+                                    }
+                                    {
+                                        selectedPcImageFile.fileNm ?
+                                            <button type="button" className="btn btn-danger mx-1" id="delPcImageBtn" onClick={delImage}>삭제</button> : ''
+                                    }
+                                    {
+                                        !selectedPcImageFile.fileNm ?
+                                            <input className="form-control" type="file" id="pcImageFile"
+                                                   name="pcImageFile" title="PC 이미지" required={true}
+                                                   onChange={changedFile}/> : ''
+                                    }
+                                    <img src={selectedPcImageFile.filePath} className={`w-100 my-3 ${!selectedPcImageFile.fileNm ? "d-none" : ""}`}/>
                                 </div>
                             </div>
                             <div className={`${seq ? 'mb-5' : 'mb-2'} row`}>
                                 <label htmlFor="formFile" className="col-md-2 form-label">MOBILE 이미지</label>
                                 <div className="col-md-10">
-                                    <input className="form-control" type="file" id="moImageFile" name="moImageFile" title="MOBILE 이미지" required={true} onChange={changedFile}/>
-                                    <img src={selectedMoImageFile} className={`w-100 my-3 ${!selectedMoImageFile ? "d-none" : ""}`}/>
+                                    {
+                                        selectedMoImageFile.fileNm ?
+                                        <label className="col-form-label mx-2">{selectedMoImageFile.fileNm} </label> : ''
+                                    }
+                                    {
+                                        selectedMoImageFile.fileNm ?
+                                            <button type="button" className="btn btn-danger mx-1" id="delMoImageBtn" onClick={delImage}>삭제</button> : ''
+                                    }
+                                    {
+                                        !selectedMoImageFile.fileNm ?
+                                            <input className="form-control" type="file" id="moImageFile"
+                                                   name="moImageFile" title="MOBILE 이미지" required={true}
+                                                   onChange={changedFile}/> : ''
+                                    }
+                                    <img src={selectedMoImageFile.filePath}
+                                         className={`w-100 my-3 ${!selectedMoImageFile.fileNm ? "d-none" : ""}`}/>
                                 </div>
                             </div>
                             {
