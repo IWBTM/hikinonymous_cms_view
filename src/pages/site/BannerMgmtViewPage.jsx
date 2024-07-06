@@ -28,8 +28,9 @@ const BannerMgmtViewPage = ({leftMenuInfo}) => {
             const response = await api.get(`${filePath}/${seq}`);
             const responseDto = response.data;
             if (responseDto.code === 200) {
-                setSelectedMoImageFile(`http://localhost:8082/upload/${responseDto.data.pcImage.filePath}${responseDto.data.pcImage.fileNm}`);
-                setSelectedPcImageFile(`http://localhost:8082/upload/${responseDto.data.moImage.filePath}${responseDto.data.moImage.fileNm}`);
+                console.log('uri:: ', )
+                setSelectedMoImageFile(`${responseDto.data.pcImage.fileApiPath}${responseDto.data.pcImage.fileInfoSeq}`);
+                setSelectedPcImageFile(`${responseDto.data.moImage.fileApiPath}${responseDto.data.moImage.fileInfoSeq}`);
                 setBannerDto(responseDto.data);
             }
         }
