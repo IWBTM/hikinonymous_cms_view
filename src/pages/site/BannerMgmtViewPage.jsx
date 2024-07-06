@@ -28,8 +28,8 @@ const BannerMgmtViewPage = ({leftMenuInfo}) => {
             const response = await api.get(`${filePath}/${seq}`);
             const responseDto = response.data;
             if (responseDto.code === 200) {
-                setSelectedMoImageFile(responseDto.data.pcImage.fileFullPath);
-                setSelectedPcImageFile(responseDto.data.moImage.fileFullPath);
+                setSelectedMoImageFile(`http://localhost:8082/upload/${responseDto.data.pcImage.filePath}${responseDto.data.pcImage.fileNm}`);
+                setSelectedPcImageFile(`http://localhost:8082/upload/${responseDto.data.moImage.filePath}${responseDto.data.moImage.fileNm}`);
                 setBannerDto(responseDto.data);
             }
         }
@@ -177,7 +177,6 @@ const BannerMgmtViewPage = ({leftMenuInfo}) => {
                                     <img src={selectedMoImageFile} className={`w-100 my-3 ${!selectedMoImageFile ? "d-none" : ""}`}/>
                                 </div>
                             </div>
-
                             {
                                 seq ?
                                     <div className="mb-3 row">
@@ -194,7 +193,7 @@ const BannerMgmtViewPage = ({leftMenuInfo}) => {
                                         <label htmlFor="html5-date-input"
                                                className="col-md-2 col-form-label">등록자</label>
                                         <div className="col-md-10">
-                                            <label className="col-form-label">{bannerDto.register && bannerDto.register.managerNm}</label>
+                                            <label className="col-form-label">{bannerDto.registerNm}</label>
                                         </div>
                                     </div> : ''
                             }
