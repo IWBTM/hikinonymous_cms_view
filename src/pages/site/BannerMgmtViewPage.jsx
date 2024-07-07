@@ -19,24 +19,36 @@ const BannerMgmtViewPage = ({leftMenuInfo}) => {
 
     const navigate = useNavigate();
 
+    let imageDelSeqList = [];
+
     useEffect(() => {
         const getPositionList = async () => {
             setPositionList(await getCodeListByCodeMaster('BANNER_POSITION'));
         }
 
-        const getBannerView = async () => {
-            const response = await api.get(`${filePath}/${seq}`);
-            const responseDto = response.data;
-            if (responseDto.code === 200) {
-                setSelectedPcImageFile({filePath: `${responseDto.data.pcImage.fileApiPath}${responseDto.data.pcImage.fileInfoSeq}`, fileNm: responseDto.data.pcImage.fileOriNm});
-                setSelectedMoImageFile({filePath: `${responseDto.data.moImage.fileApiPath}${responseDto.data.moImage.fileInfoSeq}`, fileNm: responseDto.data.moImage.fileOriNm});
-                setBannerDto(responseDto.data);
-            }
-        }
-
         getPositionList();
         if (seq) getBannerView();
     }, []);
+
+    const getBannerView = async () => {
+        const response = await api.get(`${filePath}/${seq}`);
+        const responseDto = response.data;
+        if (responseDto.code === 200) {
+            setSelectedPcImageFile({
+                filePath: `${responseDto.data.pcImage.fileApiPath}${responseDto.data.pcImage.fileInfoSeq}`,
+                fileNm: responseDto.data.pcImage.fileOriNm,
+                fileInfoSeq: responseDto.data.pcImage.fileInfoSeq,
+                isExist: true
+            });
+            setSelectedMoImageFile({
+                filePath: `${responseDto.data.moImage.fileApiPath}${responseDto.data.moImage.fileInfoSeq}`,
+                fileNm: responseDto.data.moImage.fileOriNm,
+                fileInfoSeq: responseDto.data.moImage.fileInfoSeq,
+                isExist: true
+            });
+            setBannerDto(responseDto.data);
+        }
+    }
 
     const goList = () => {
         navigate(`${filePath.substring(0, filePath.lastIndexOf('view'))}list`);
@@ -87,6 +99,23 @@ const BannerMgmtViewPage = ({leftMenuInfo}) => {
                 alert(`${element.title}(은)는 필수 요소 입니다.`);
                 isValid = false;
             }
+
+            const keyLowerCase = key.toLowerCase();
+            if (isValid && element.required && keyLowerCase.indexOf('image') > -1) {
+                if (keyLowerCase.indexOf('pc') > -1) {
+                    if (!value.size && !selectedPcImageFile.isExist) {
+                        alert(`${element.title}(은)는 필수 요소 입니다.`);
+                        isValid = false;
+                    }
+                }
+
+                if (keyLowerCase.indexOf('mo') > -1) {
+                    if (!value.size && !selectedMoImageFile.isExist) {
+                        alert(`${element.title}(은)는 필수 요소 입니다.`);
+                        isValid = false;
+                    }
+                }
+            }
         })
 
         return isValid;
@@ -97,21 +126,28 @@ const BannerMgmtViewPage = ({leftMenuInfo}) => {
         const deviceType = id.substring(0, id.indexOf('ImageFile'));
 
         const file = e.currentTarget.files[0];
-        let reader = new FileReader();
-        reader.onload = (e) => {
-            if (deviceType == 'pc') setSelectedPcImageFile({filePath: e.target.result, fileNm: file.name});
-            if (deviceType == 'mo') setSelectedMoImageFile({filePath: e.target.result, fileNm: file.name});
+        if (file) {
+            let reader = new FileReader();
+            reader.onload = (e) => {
+                if (deviceType == 'pc') setSelectedPcImageFile({filePath: e.target.result, fileNm: file.name, fileInfoSeq: null, isExist: true});
+                if (deviceType == 'mo') setSelectedMoImageFile({filePath: e.target.result, fileNm: file.name, fileInfoSeq: null, isExist: true});
+            }
+            reader.readAsDataURL(file);
         }
-        reader.readAsDataURL(file);
     }
 
     const delImage = (e) => {
         const id = e.currentTarget.id.toLowerCase();
+
         if (id.indexOf('pc') > -1) {
             setSelectedPcImageFile({});
+            document.getElementById('pcImageFile').value = null;
         } else if (id.indexOf('mo') > -1) {
             setSelectedMoImageFile({});
+            document.getElementById('moImageFile').value = null;
         }
+
+        imageDelSeqList.push(e.currentTarget.value);
     }
 
     return <div className="container-xxl flex-grow-1 container-p-y">
@@ -122,10 +158,12 @@ const BannerMgmtViewPage = ({leftMenuInfo}) => {
                     <div className="card-body">
                         <form id="procForm" ref={formRef}>
                             <input name="bannerSeq" value={bannerDto.bannerSeq} type="hidden"/>
+                            <input name="imageDelSeq" id="imageDelSeq" type="hidden"/>
+                            <input name="delYn" type="hidden" value={bannerDto.delYn}/>
                             <div className="mb-3 row">
                                 <label htmlFor="html5-text-input" className="col-md-2 col-form-label">배너명</label>
                                 <div className="col-md-10">
-                                    <input className="form-control" type="text" value={bannerDto.title}
+                                    <input className="form-control" type="text" defaultValue={bannerDto.title}
                                            id="html5-text-input" name="title" title="배너명" required={true}/>
                                 </div>
                             </div>
@@ -150,14 +188,14 @@ const BannerMgmtViewPage = ({leftMenuInfo}) => {
                             <div className="mb-3 row">
                                 <label htmlFor="html5-text-input" className="col-md-2 col-form-label">설명</label>
                                 <div className="col-md-10">
-                                    <input className="form-control" type="text" value={bannerDto.etc}
+                                    <input className="form-control" type="text" defaultValue={bannerDto.etc}
                                            id="html5-text-input" name="etc" title="설명" required={true}/>
                                 </div>
                             </div>
                             <div className="mb-3 row">
                                 <label htmlFor="html5-text-input" className="col-md-2 col-form-label">LINK URL</label>
                                 <div className="col-md-10">
-                                    <input className="form-control" type="text" value={bannerDto.url}
+                                    <input className="form-control" type="text" defaultValue={bannerDto.url}
                                            id="html5-text-input" name="url" title="LINK URL" required={true}/>
                                 </div>
                             </div>
@@ -174,19 +212,20 @@ const BannerMgmtViewPage = ({leftMenuInfo}) => {
                                 <div className="col-md-10">
                                     {
                                         selectedPcImageFile.fileNm ?
-                                            <label className="col-form-label mx-2">{selectedPcImageFile.fileNm} </label> : ''
+                                            <label
+                                                className="col-form-label mx-2">{selectedPcImageFile.fileNm} </label> : ''
                                     }
                                     {
                                         selectedPcImageFile.fileNm ?
-                                            <button type="button" className="btn btn-danger mx-1" id="delPcImageBtn" onClick={delImage}>삭제</button> : ''
+                                            <button type="button" value={selectedPcImageFile.fileInfoSeq}
+                                                    className="btn btn-danger mx-1 mb-sm-2" id="delPcImageBtn"
+                                                    onClick={delImage}>삭제</button> : ''
                                     }
-                                    {
-                                        !selectedPcImageFile.fileNm ?
-                                            <input className="form-control" type="file" id="pcImageFile"
+                                            <input className={`form-control ${selectedPcImageFile.isExist ? 'd-none' : ''}`} type="file" id="pcImageFile"
                                                    name="pcImageFile" title="PC 이미지" required={true}
-                                                   onChange={changedFile}/> : ''
-                                    }
-                                    <img src={selectedPcImageFile.filePath} className={`w-100 my-3 ${!selectedPcImageFile.fileNm ? "d-none" : ""}`}/>
+                                                   onChange={changedFile}/>
+                                    <img src={selectedPcImageFile.filePath}
+                                         className={`w-100 my-3 ${!selectedPcImageFile.fileNm ? "d-none" : ""}`}/>
                                 </div>
                             </div>
                             <div className={`${seq ? 'mb-5' : 'mb-2'} row`}>
@@ -194,18 +233,18 @@ const BannerMgmtViewPage = ({leftMenuInfo}) => {
                                 <div className="col-md-10">
                                     {
                                         selectedMoImageFile.fileNm ?
-                                        <label className="col-form-label mx-2">{selectedMoImageFile.fileNm} </label> : ''
+                                            <label
+                                                className="col-form-label mx-2">{selectedMoImageFile.fileNm} </label> : ''
                                     }
                                     {
                                         selectedMoImageFile.fileNm ?
-                                            <button type="button" className="btn btn-danger mx-1" id="delMoImageBtn" onClick={delImage}>삭제</button> : ''
+                                            <button type="button" value={selectedMoImageFile.fileInfoSeq}
+                                                    className="btn btn-danger mx-1 mb-sm-2" id="delMoImageBtn"
+                                                    onClick={delImage}>삭제</button> : ''
                                     }
-                                    {
-                                        !selectedMoImageFile.fileNm ?
-                                            <input className="form-control" type="file" id="moImageFile"
+                                            <input className={`form-control ${selectedMoImageFile.isExist ? 'd-none' : ''}`} type="file" id="moImageFile"
                                                    name="moImageFile" title="MOBILE 이미지" required={true}
-                                                   onChange={changedFile}/> : ''
-                                    }
+                                                   onChange={changedFile}/>
                                     <img src={selectedMoImageFile.filePath}
                                          className={`w-100 my-3 ${!selectedMoImageFile.fileNm ? "d-none" : ""}`}/>
                                 </div>
@@ -227,6 +266,27 @@ const BannerMgmtViewPage = ({leftMenuInfo}) => {
                                                className="col-md-2 col-form-label">등록자</label>
                                         <div className="col-md-10">
                                             <label className="col-form-label">{bannerDto.registerNm}</label>
+                                        </div>
+                                    </div> : ''
+                            }
+
+                            {
+                                seq && bannerDto.updaterNm ?
+                                    <div className="mb-3 row">
+                                        <label htmlFor="html5-date-input"
+                                               className="col-md-2 col-form-label">수정일</label>
+                                        <div className="col-md-10">
+                                            <label className="col-form-label">{bannerDto.updDate}</label>
+                                        </div>
+                                    </div> : ''
+                            }
+                            {
+                                seq && bannerDto.updaterNm ?
+                                    <div className="mb-3 row">
+                                        <label htmlFor="html5-date-input"
+                                               className="col-md-2 col-form-label">수정자</label>
+                                        <div className="col-md-10">
+                                            <label className="col-form-label">{bannerDto.updaterNm}</label>
                                         </div>
                                     </div> : ''
                             }
