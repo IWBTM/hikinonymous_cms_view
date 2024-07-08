@@ -36,6 +36,9 @@ import AuthMgmtListPage from "./pages/manager/AuthMgmtListPage";
 import BannerMgmtListPage from "./pages/site/BannerMgmtListPage";
 import BannerMgmtViewPage from "./pages/site/BannerMgmtViewPage";
 import MemberMgmtListPage from "./pages/member/MemberMgmtListPage";
+import MemberMgmtViewPage from "./pages/member/MemberMgmtViewPage";
+import DropMemberMgmtListPage from "./pages/member/DropMemberMgmtListPage";
+import DropMemberMgmtViewPage from "./pages/member/DropMemberMgmtViewPage";
 
 function App() {
 
@@ -100,7 +103,10 @@ function App() {
                         setBannerMgmtRoute(childPages, leftMenu, menu, BannerMgmtListPage, BannerMgmtViewPage);
                     }
                     case 'MEMBER_MANAGEMENT': {
-                        setMemberMgmtRoute(childPages, leftMenu, menu, MemberMgmtListPage, BannerMgmtViewPage);
+                        setMemberMgmtRoute(childPages, leftMenu, menu, MemberMgmtListPage, MemberMgmtViewPage);
+                    }
+                    case 'DROP_MEMBER_MANAGEMENT': {
+                        setMemberMgmtRoute(childPages, leftMenu, menu, DropMemberMgmtListPage, DropMemberMgmtViewPage);
                     }
                 }
             });

@@ -5,7 +5,7 @@ import Table from "../../components/Table";
 import Pagination from "../../layout/Pagination";
 import MenuTitle from "../../layout/MenuTitle";
 
-const MemberMgmtListPage = ({leftMenuInfo, filePath}) => {
+const DropMemberMgmtListPage = ({leftMenuInfo, filePath}) => {
     const [tableResult, setTableResultList] = useState({});
 
     const navigate = useNavigate();
@@ -35,7 +35,7 @@ const MemberMgmtListPage = ({leftMenuInfo, filePath}) => {
                     <td>{row.reportCnt}</td>
                     <td>{row.totalBoardCnt}</td>
                     <td>{row.totalReplyCnt}</td>
-                    <td>{row.lastLoginDate}</td>
+                    <td>{row.dropDate}</td>
                     <td>{row.regDate}</td>
                 </tr>;
             }).reverse();
@@ -69,7 +69,7 @@ const MemberMgmtListPage = ({leftMenuInfo, filePath}) => {
                     '신고 횟수',
                     '작성한 게시물 수',
                     '작성한 댓글 수',
-                    '마지막 로그인 일',
+                    '탈퇴일',
                     '가입일'
                 ]}
                 leftMenuInfo={leftMenuInfo}
@@ -82,4 +82,4 @@ const MemberMgmtListPage = ({leftMenuInfo, filePath}) => {
     );
 }
 
-export default MemberMgmtListPage;
+export default DropMemberMgmtListPage;
