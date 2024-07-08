@@ -5,7 +5,7 @@ import Table from "../../components/Table";
 import Pagination from "../../layout/Pagination";
 import MenuTitle from "../../layout/MenuTitle";
 
-const BannerMgmtListPage = ({leftMenuInfo, filePath}) => {
+const MemberMgmtListPage = ({leftMenuInfo, filePath}) => {
     const [tableResult, setTableResultList] = useState({});
 
     const navigate = useNavigate();
@@ -26,11 +26,16 @@ const BannerMgmtListPage = ({leftMenuInfo, filePath}) => {
         if (!tableResult.empty && tableResult.content) {
             return tableResult.content.map((row, index) => {
                 let rowNum = (tableResult.totalElements - tableResult.totalPages) * (tableResult.number + index + 1);
-                return <tr className="cursor-pointer" id={row.bannerSeq} onClick={goView} key={index}>
+                return <tr className="cursor-pointer" id={row.memberSeq} onClick={goView} key={index}>
                     <th scope="row">{rowNum}</th>
-                    <td>{row.title}</td>
-                    <td>{row.position.codeNm}</td>
-                    <td>{row.useYn == 'Y' ? '사용' : '미사용'}</td>
+                    <td>{row.memberName}</td>
+                    <td>{row.memberNickName}</td>
+                    <td>{row.memberEmail}</td>
+                    <td>{row.memberStatus.codeNm}</td>
+                    <td>{row.reportCnt}</td>
+                    <td>{row.totalBoardCnt}</td>
+                    <td>{row.totalReplyCnt}</td>
+                    <td>{row.lastLoginDate}</td>
                     <td>{row.regDate}</td>
                 </tr>;
             }).reverse();
@@ -57,10 +62,15 @@ const BannerMgmtListPage = ({leftMenuInfo, filePath}) => {
             </div>
             <Table
                 columnList={[
-                    '배너명',
-                    '위치',
-                    '사용 여부',
-                    '등록일'
+                    '회원명',
+                    '별명',
+                    '아이디 (이메일)',
+                    '회원 상태',
+                    '신고 횟수',
+                    '작성한 게시물 수',
+                    '작성한 댓글 수',
+                    '마지막 로그인 일',
+                    '가입일'
                 ]}
                 leftMenuInfo={leftMenuInfo}
                 isOnHeader={true}
@@ -75,4 +85,4 @@ const BannerMgmtListPage = ({leftMenuInfo, filePath}) => {
     );
 }
 
-export default BannerMgmtListPage;
+export default MemberMgmtListPage;

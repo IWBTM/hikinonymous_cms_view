@@ -35,6 +35,7 @@ import CmsMenuMgmtListPage from "./pages/manager/CmsMenuMgmtListPage";
 import AuthMgmtListPage from "./pages/manager/AuthMgmtListPage";
 import BannerMgmtListPage from "./pages/site/BannerMgmtListPage";
 import BannerMgmtViewPage from "./pages/site/BannerMgmtViewPage";
+import MemberMgmtListPage from "./pages/member/MemberMgmtListPage";
 
 function App() {
 
@@ -98,6 +99,9 @@ function App() {
                     case 'BANNER_MANAGEMENT': {
                         setBannerMgmtRoute(childPages, leftMenu, menu, BannerMgmtListPage, BannerMgmtViewPage);
                     }
+                    case 'MEMBER_MANAGEMENT': {
+                        setMemberMgmtRoute(childPages, leftMenu, menu, MemberMgmtListPage, BannerMgmtViewPage);
+                    }
                 }
             });
         });
@@ -118,6 +122,11 @@ function App() {
     };
 
     const setBannerMgmtRoute = (childPages, leftMenu, menu, ListPageComponent, ViewPageComponent) => {
+        setListPageRoute(childPages, leftMenu, menu, ListPageComponent);
+        setViewPageRoute(childPages, leftMenu, menu, ViewPageComponent);
+    };
+
+    const setMemberMgmtRoute = (childPages, leftMenu, menu, ListPageComponent, ViewPageComponent) => {
         setListPageRoute(childPages, leftMenu, menu, ListPageComponent);
         setViewPageRoute(childPages, leftMenu, menu, ViewPageComponent);
     };
