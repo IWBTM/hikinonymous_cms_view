@@ -39,6 +39,7 @@ import MemberMgmtListPage from "./pages/member/MemberMgmtListPage";
 import MemberMgmtViewPage from "./pages/member/MemberMgmtViewPage";
 import DropMemberMgmtListPage from "./pages/member/DropMemberMgmtListPage";
 import DropMemberMgmtViewPage from "./pages/member/DropMemberMgmtViewPage";
+import CategoryMgmtListPage from "./pages/category/CategoryMgmtListPage";
 
 function App() {
 
@@ -91,22 +92,25 @@ function App() {
             leftMenu.children.map(menu => {
                 switch (menu.menuCode) {
                     case 'MANAGER_MANAGEMENT': {
-                        setManagerMgmtRoute(childPages, leftMenu, menu, ManagerMgmtListPage, ManagerMgmtViewPage);
+                        setMenuMgmtRoute(childPages, leftMenu, menu, ManagerMgmtListPage, ManagerMgmtViewPage);
                     }
                     case 'CMS_MENU_MANAGEMENT': {
-                        setCmsMenuMgmtRoute(childPages, leftMenu, menu, CmsMenuMgmtListPage);
+                        setMenuMgmtRoute(childPages, leftMenu, menu, CmsMenuMgmtListPage);
                     }
                     case 'ADMIN_AUTH_MANAGEMENT': {
-                        setMenuAuthMgmtRoute(childPages, leftMenu, menu, AuthMgmtListPage);
+                        setMenuMgmtRoute(childPages, leftMenu, menu, AuthMgmtListPage);
                     }
                     case 'BANNER_MANAGEMENT': {
-                        setBannerMgmtRoute(childPages, leftMenu, menu, BannerMgmtListPage, BannerMgmtViewPage);
+                        setMenuMgmtRoute(childPages, leftMenu, menu, BannerMgmtListPage, BannerMgmtViewPage);
                     }
                     case 'MEMBER_MANAGEMENT': {
-                        setMemberMgmtRoute(childPages, leftMenu, menu, MemberMgmtListPage, MemberMgmtViewPage);
+                        setMenuMgmtRoute(childPages, leftMenu, menu, MemberMgmtListPage, MemberMgmtViewPage);
                     }
                     case 'DROP_MEMBER_MANAGEMENT': {
-                        setMemberMgmtRoute(childPages, leftMenu, menu, DropMemberMgmtListPage, DropMemberMgmtViewPage);
+                        setMenuMgmtRoute(childPages, leftMenu, menu, DropMemberMgmtListPage, DropMemberMgmtViewPage);
+                    }
+                    case 'CATEGORY_MANAGEMENT': {
+                        setMenuMgmtRoute(childPages, leftMenu, menu, CategoryMgmtListPage, DropMemberMgmtViewPage);
                     }
                 }
             });
@@ -114,29 +118,13 @@ function App() {
         return childPages;
     }
     
-    const setManagerMgmtRoute = (childPages, leftMenu, menu, ListPageComponent, ViewPageComponent) => {
+    const setMenuMgmtRoute = (childPages, leftMenu, menu, ListPageComponent, ViewPageComponent) => {
         setListPageRoute(childPages, leftMenu, menu, ListPageComponent);
-        setViewPageRoute(childPages, leftMenu, menu, ViewPageComponent);
+        if (ViewPageComponent) {
+            setViewPageRoute(childPages, leftMenu, menu, ViewPageComponent);
+        }
     };
 
-    const setCmsMenuMgmtRoute = (childPages, leftMenu, menu, ListPageComponent) => {
-        setListPageRoute(childPages, leftMenu, menu, ListPageComponent);
-    };
-
-    const setMenuAuthMgmtRoute = (childPages, leftMenu, menu, ListPageComponent) => {
-        setListPageRoute(childPages, leftMenu, menu, ListPageComponent);
-    };
-
-    const setBannerMgmtRoute = (childPages, leftMenu, menu, ListPageComponent, ViewPageComponent) => {
-        setListPageRoute(childPages, leftMenu, menu, ListPageComponent);
-        setViewPageRoute(childPages, leftMenu, menu, ViewPageComponent);
-    };
-
-    const setMemberMgmtRoute = (childPages, leftMenu, menu, ListPageComponent, ViewPageComponent) => {
-        setListPageRoute(childPages, leftMenu, menu, ListPageComponent);
-        setViewPageRoute(childPages, leftMenu, menu, ViewPageComponent);
-    };
-    
     const setListPageRoute = (childPages, leftMenu, menu, ListPageComponent) => {
         childPages.push(
             <Route
