@@ -132,7 +132,6 @@ const CodeMgmtListPage = ({leftMenuInfo, filePath}) => {
         formData.forEach((value, key) => {
             requestDto[key] = value
         })
-        console.log("document.getElementById('codeMaster'):: ", document.getElementById('codeMaster'))
         requestDto['codeMaster'] = document.getElementById('codeMaster').value;
         let url = filePath.substring(0, filePath.lastIndexOf('view'));
         if (isMaster) {
