@@ -7,11 +7,14 @@ const CmsMenuMgmtListPage = ({leftMenuInfo, filePath}) => {
     const [ parentTableResult, setParentTableResultList ] = useState({});
     const [ childTableResult, setChildTableResultList ] = useState({});
 
+    const [ isLoadingOfParent, setIsLoadingOfParent ] = useState(false);
+    const [ isLoadingOfChild, setIsLoadingOfChild ] = useState(false);
+    
     const formRef = useRef();
 
     useEffect(() => {
 
-        getTableResultList();
+        getParentTableResultList();
     }, []);
 
     const clickParentRow = (e) => {
@@ -53,8 +56,10 @@ const CmsMenuMgmtListPage = ({leftMenuInfo, filePath}) => {
         })
     }
 
-    const getTableResultList = async () => {
+    const getParentTableResultList = async () => {
+        setIsLoadingOfParent(true);
         const response = await api.get(`${filePath}/1`);
+        setIsLoadingOfParent(false);
         const responseData = response.data;
         if (responseData.code === 200) {
             setParentTableResultList(responseData.data);
@@ -62,7 +67,9 @@ const CmsMenuMgmtListPage = ({leftMenuInfo, filePath}) => {
     };
 
     const getChildTableList = async (authDir) => {
+        setIsLoadingOfChild(true);
         const response = await api.get(`${filePath}/2?authDir=${authDir}`);
+        setIsLoadingOfChild(false);
         const responseData = response.data;
         if (responseData.code === 200) {
             setChildTableResultList(responseData.data);
@@ -115,7 +122,7 @@ const CmsMenuMgmtListPage = ({leftMenuInfo, filePath}) => {
         const responseDto = response.data;
         if (responseDto.code === 200) {
             if (requestDto.menuLevel == 1) {
-                getTableResultList();
+                getParentTableResultList();
             } else {
                 getChildTableList(requestDto.authDir);
             }
@@ -159,6 +166,7 @@ const CmsMenuMgmtListPage = ({leftMenuInfo, filePath}) => {
                                     leftMenuInfo={leftMenuInfo}
                                     isOnHeader={false}
                                     renderRowCallback={renderParentRows}
+                                    isLoading={isLoadingOfParent}
                                 />
                             </div>
                         </div>
@@ -178,6 +186,7 @@ const CmsMenuMgmtListPage = ({leftMenuInfo, filePath}) => {
                                     leftMenuInfo={leftMenuInfo}
                                     isOnHeader={false}
                                     renderRowCallback={renderChildRows}
+                                    isLoading={isLoadingOfChild}
                                 />
                             </div>
                         </div>

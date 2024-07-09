@@ -40,6 +40,7 @@ import MemberMgmtViewPage from "./pages/member/MemberMgmtViewPage";
 import DropMemberMgmtListPage from "./pages/member/DropMemberMgmtListPage";
 import DropMemberMgmtViewPage from "./pages/member/DropMemberMgmtViewPage";
 import CategoryMgmtListPage from "./pages/category/CategoryMgmtListPage";
+import CodeMgmtListPage from "./pages/code/CodeMgmtListPage";
 
 function App() {
 
@@ -110,7 +111,10 @@ function App() {
                         setMenuMgmtRoute(childPages, leftMenu, menu, DropMemberMgmtListPage, DropMemberMgmtViewPage);
                     }
                     case 'CATEGORY_MANAGEMENT': {
-                        setMenuMgmtRoute(childPages, leftMenu, menu, CategoryMgmtListPage, DropMemberMgmtViewPage);
+                        setMenuMgmtRoute(childPages, leftMenu, menu, CategoryMgmtListPage);
+                    }
+                    case 'CODE_MANAGEMENT': {
+                        setMenuMgmtRoute(childPages, leftMenu, menu, CodeMgmtListPage);
                     }
                 }
             });

@@ -12,11 +12,19 @@ const AuthMgmtListPage = ({leftMenuInfo, filePath}) => {
     const [ parentAuthTableResult, setParentAuthTableResultList ] = useState({});
     const [ childAuthTableResult, setChildAuthTableResultList ] = useState({});
 
+    const [ isLoadingOfManager, setIsLoadingOfManager ] = useState(false);
+    const [ isLoadingOfAuthParent, setIsLoadingOfAuthParent ] = useState(false);
+    const [ isLoadingOfAuthChild, setIsLoadingOfAuthChild ] = useState(false);
+    const [ isLoadingOfParent, setIsLoadingOfParent ] = useState(false);
+    const [ isLoadingOfChild, setIsLoadingOfChild ] = useState(false);
+
     const formRef = useRef();
 
     useEffect(() => {
         const getManagerTableResultList = async () => {
+            setIsLoadingOfManager(true);
             const response = await api.get('/cms/admin/manager/list');
+            setIsLoadingOfManager(false);
             const responseData = response.data;
             if (responseData.code === 200) {
                 setManagerTableResult(responseData.data);
@@ -98,7 +106,9 @@ const AuthMgmtListPage = ({leftMenuInfo, filePath}) => {
 
     const getParentTableList = async () => {
         const managerSeq = document.getElementById('managerSeq').value;
+        setIsLoadingOfParent(true);
         const response = await api.get(`/cms/admin/auth/menu/list/${managerSeq}?isExist=false`);
+        setIsLoadingOfParent(false);
         const responseData = response.data;
         if (responseData.code === 200) {
             setParentTableResultList(responseData.data);
@@ -108,7 +118,9 @@ const AuthMgmtListPage = ({leftMenuInfo, filePath}) => {
     const getChildTableList = async () => {
         const managerSeq = document.getElementById('managerSeq').value;
         const authDir = document.getElementById('authDir').value;
+        setIsLoadingOfChild(true);
         const response = await api.get(`/cms/admin/auth/menu/list/${managerSeq}?authDir=${authDir}&isExist=false`);
+        setIsLoadingOfChild(false);
         const responseData = response.data;
         if (responseData.code === 200) {
             setChildTableResultList(responseData.data);
@@ -117,7 +129,9 @@ const AuthMgmtListPage = ({leftMenuInfo, filePath}) => {
 
     const getParentAuthTableList = async () => {
         const managerSeq = document.getElementById('managerSeq').value;
+        setIsLoadingOfAuthParent(true);
         const response = await api.get(`/cms/admin/auth/menu/list/${managerSeq}?isExist=true`);
+        setIsLoadingOfAuthParent(false);
         const responseData = response.data;
         if (responseData.code === 200) {
             setParentAuthTableResultList(responseData.data);
@@ -127,7 +141,9 @@ const AuthMgmtListPage = ({leftMenuInfo, filePath}) => {
     const getChildAuthTableList = async () => {
         const managerSeq = document.getElementById('managerSeq').value;
         const authDir = document.getElementById('authDir').value;
+        setIsLoadingOfAuthChild(true);
         const response = await api.get(`/cms/admin/auth/menu/list/${managerSeq}?authDir=${authDir}&isExist=true`);
+        setIsLoadingOfAuthChild(false);
         const responseData = response.data;
         if (responseData.code === 200) {
             setChildAuthTableResultList(responseData.data);
@@ -306,6 +322,7 @@ const AuthMgmtListPage = ({leftMenuInfo, filePath}) => {
                 leftMenuInfo={leftMenuInfo}
                 isOnHeader={true}
                 renderRowCallback={renderRows}
+                isLoading={isLoadingOfManager}
             />
 
             <div className="row my-4">
@@ -323,6 +340,7 @@ const AuthMgmtListPage = ({leftMenuInfo, filePath}) => {
                                     leftMenuInfo={leftMenuInfo}
                                     isOnHeader={false}
                                     renderRowCallback={renderParentRows}
+                                    isLoading={isLoadingOfParent}
                                 />
                             </div>
                         </div>
@@ -342,6 +360,7 @@ const AuthMgmtListPage = ({leftMenuInfo, filePath}) => {
                                     leftMenuInfo={leftMenuInfo}
                                     isOnHeader={false}
                                     renderRowCallback={renderChildRows}
+                                    isLoading={isLoadingOfChild}
                                 />
                             </div>
                         </div>
@@ -363,6 +382,7 @@ const AuthMgmtListPage = ({leftMenuInfo, filePath}) => {
                                     leftMenuInfo={leftMenuInfo}
                                     isOnHeader={false}
                                     renderRowCallback={renderParentAuthRows}
+                                    isLoading={isLoadingOfAuthParent}
                                 />
                             </div>
                         </div>
@@ -383,6 +403,7 @@ const AuthMgmtListPage = ({leftMenuInfo, filePath}) => {
                                     leftMenuInfo={leftMenuInfo}
                                     isOnHeader={false}
                                     renderRowCallback={renderChildAuthRows}
+                                    isLoading={isLoadingOfAuthChild}
                                 />
                             </div>
                         </div>

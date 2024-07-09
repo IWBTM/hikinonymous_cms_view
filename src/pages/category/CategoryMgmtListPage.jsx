@@ -145,7 +145,7 @@ const CategoryMgmtListPage = ({leftMenuInfo, filePath}) => {
                     <div className="card mb-4">
                         <div className="card-body">
                             <div className="mb-2">
-                                <small className="text-light fw-medium">폴더가 같아야 상위/하위 카테고리 관계가 형성 됩니다.</small>
+                                <small className="text-light fw-medium">카테고리는 현재 1depth만 존재합니다.</small>
                             </div>
                             <form ref={formRef}>
                                 <input name="categorySeq" type="hidden"/>
