@@ -3,7 +3,7 @@ import api from "../../api/api";
 import Table from "../../components/Table";
 import MenuTitle from "../../layout/MenuTitle";
 
-const TermMgmtListPage = ({leftMenuInfo, filePath}) => {
+const PrivacyMgmtListPage = ({leftMenuInfo, filePath}) => {
     const [ parentTableResult, setParentTableResultList ] = useState({});
 
     const [ isExist, setIsExist ] = useState(false);
@@ -233,7 +233,8 @@ const TermMgmtListPage = ({leftMenuInfo, filePath}) => {
                                         <button type="button" className="btn btn-secondary mx-1"
                                                 onClick={addNewMenu}>추가
                                         </button>
-                                        <button type="button" className={`btn btn-warning mx-1 ${!isExist ? 'd-none' : ''}`}
+                                        <button type="button"
+                                                className={`btn btn-warning mx-1 ${!isExist ? 'd-none' : ''}`}
                                                 onClick={del}>삭제
                                         </button>
                                         <button type="button" className="btn btn-primary" onClick={proc}>저장
@@ -249,4 +250,4 @@ const TermMgmtListPage = ({leftMenuInfo, filePath}) => {
     </div>;
 }
 
-export default TermMgmtListPage;
+export default PrivacyMgmtListPage;

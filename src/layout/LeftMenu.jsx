@@ -38,6 +38,10 @@ const LeftMenu = ({leftMenuList}) => {
         return !checkIsDashboard() ? menuAuthDir.indexOf(getAuthDirInPath()) > -1 : "";
     }
 
+    const isParentOpen = (menuAuthDir) => {
+        return !checkIsDashboard() ? menuAuthDir.indexOf(getAuthDirInPath()) > -1 : "";
+    }
+
     const isChildActive = (menuThirdPath) => {
         return !checkIsDashboard() ? getThirdPath(menuThirdPath).indexOf(getThirdPath(location.pathname)) > -1 : "";
     }
@@ -48,7 +52,7 @@ const LeftMenu = ({leftMenuList}) => {
 
     const renderLeftMenu = () => {
         return leftMenuList.map(leftMenu => {
-                return <li className={`menu-item ${isParentActive(leftMenu.authDir) ? "active" : ""}`} key={leftMenu.cmsMenuSeq}>
+                return <li className={`menu-item ${isParentActive(leftMenu.authDir) ? "active" : ""} ${isParentOpen(leftMenu.authDir) ? "open" : ""}`} key={leftMenu.cmsMenuSeq}>
                             <a href={leftMenu.filePath} className={`menu-link cursor-pointer ${leftMenu.isHaveChildren ? "menu-toggle" : ""}`} onClick={handleIsOpen}>
                                 <i className="menu-icon tf-icons bx bx-layout"></i>
                                 <div data-i18n={leftMenu.menuNm}>{leftMenu.menuNm}</div>

@@ -42,6 +42,11 @@ import DropMemberMgmtViewPage from "./pages/member/DropMemberMgmtViewPage";
 import CategoryMgmtListPage from "./pages/category/CategoryMgmtListPage";
 import CodeMgmtListPage from "./pages/code/CodeMgmtListPage";
 import TermMgmtListPage from "./pages/term/TermMgmtListPage";
+import InquiryMgmtListPage from "./pages/inquiry/InquiryMgmtListPage";
+import ServiceBoardMgmtListPage from "./pages/serviceBoard/ServiceBoardMgmtListPage";
+import ServiceBoardMgmtViewPage from "./pages/serviceBoard/ServiceBoardMgmtViewPage";
+import PrivacyMgmtListPage from "./pages/term/PrivacyMgmtListPage";
+import InquiryMgmtViewPage from "./pages/inquiry/InquiryMgmtViewPage";
 
 function App() {
 
@@ -121,7 +126,25 @@ function App() {
                         setMenuMgmtRoute(childPages, leftMenu, menu, TermMgmtListPage);
                     }
                     case 'PRIVACY_MANAGEMENT': {
-                        setMenuMgmtRoute(childPages, leftMenu, menu, TermMgmtListPage);
+                        setMenuMgmtRoute(childPages, leftMenu, menu, PrivacyMgmtListPage);
+                    }
+                    case 'INQUIRY_MANAGEMENT': {
+                        setMenuMgmtRoute(childPages, leftMenu, menu, InquiryMgmtListPage, InquiryMgmtViewPage);
+                    }
+                    case 'REPORT_MANAGEMENT': {
+                        setMenuMgmtRoute(childPages, leftMenu, menu, InquiryMgmtListPage, InquiryMgmtViewPage);
+                    }
+                    case 'ERROR_MANAGEMENT': {
+                        setMenuMgmtRoute(childPages, leftMenu, menu, InquiryMgmtListPage, InquiryMgmtViewPage);
+                    }
+                    case 'DELETE_MANAGEMENT': {
+                        setMenuMgmtRoute(childPages, leftMenu, menu, InquiryMgmtListPage, InquiryMgmtViewPage);
+                    }
+                    case 'FAQ_MANAGEMENT': {
+                        setMenuMgmtRoute(childPages, leftMenu, menu, ServiceBoardMgmtListPage, ServiceBoardMgmtViewPage);
+                    }
+                    case 'NOTICE_MANAGEMENT': {
+                        setMenuMgmtRoute(childPages, leftMenu, menu, ServiceBoardMgmtListPage, ServiceBoardMgmtViewPage);
                     }
                 }
             });
@@ -139,11 +162,12 @@ function App() {
     const setListPageRoute = (childPages, leftMenu, menu, ListPageComponent) => {
         childPages.push(
             <Route
-                key={menu.cmsMenuSeq}
+                key={`${menu.cmsMenuSeq}-${menu.filePath}`}
                 path={menu.filePath}
                 id={menu.cmsMenuSeq}
                 element={
                     <ListPageComponent
+                        key={`${menu.cmsMenuSeq}-${menu.filePath}`}
                         leftMenuInfo={{
                             parentNm: leftMenu.menuNm,
                             childNm: menu.menuNm

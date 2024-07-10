@@ -9,7 +9,7 @@ const CodeMgmtListPage = ({leftMenuInfo, filePath}) => {
 
     const [ isNew, setIsNew ] = useState(true);
     const [ isMaster, setIsMaster ] = useState(true);
-    const [ bindObj, setBindObj ] = useState('');
+    const [ bindObj, setBindObj ] = useState({});
 
     const [ isLoadingOfParent, setIsLoadingOfParent ] = useState(false);
     const [ isLoadingOfChild, setIsLoadingOfChild ] = useState(false);
@@ -21,8 +21,10 @@ const CodeMgmtListPage = ({leftMenuInfo, filePath}) => {
     }, []);
 
     useEffect(() => {
-        if (bindObj) {
+        if (bindObj && bindObj.codeMaster) {
+            setIsNew(false);
             bindToWriteForm(bindObj);
+        } else {
             setIsNew(true);
         }
     }, [isMaster, bindObj]);
@@ -30,7 +32,7 @@ const CodeMgmtListPage = ({leftMenuInfo, filePath}) => {
 
     const clickParentRow = (e) => {
         setIsMaster(true);
-        setIsNew(false);
+        setIsNew(true);
 
         const codeMaster = e.currentTarget.getAttribute('codeMaster');
         getChildTableList(codeMaster);
@@ -41,7 +43,7 @@ const CodeMgmtListPage = ({leftMenuInfo, filePath}) => {
 
     const clickChildRow = (e) => {
         setIsMaster(false);
-        setIsNew(false);
+        setIsNew(true);
 
         const bindObj = e.currentTarget.getAttribute('bindObj');
         setBindObj(JSON.parse(bindObj));
@@ -60,6 +62,7 @@ const CodeMgmtListPage = ({leftMenuInfo, filePath}) => {
         const formData = new FormData(formRef.current);
         const elements = formRef.current.elements;
         setIsNew(false);
+        setBindObj({});
         formData.forEach((value, key) => {
 
             if (elements[key].tagName == 'SELECT') {
@@ -177,6 +180,30 @@ const CodeMgmtListPage = ({leftMenuInfo, filePath}) => {
         }
     }
 
+    const del = async () => {
+        if (isMaster) {
+            const response = await api.post(`${filePath.substring(0, filePath.lastIndexOf('list'))}codeMaster/updateDelYn`, {
+                codeMaster: document.getElementById('codeMaster').value,
+                delYn: 'Y'
+            });
+            const responseDto = response.data;
+            if (responseDto.code === 200) {
+                alert('삭제 되었습니다.');
+                getParentTableResultList();
+            }
+        } else {
+            const response = await api.post(`${filePath.substring(0, filePath.lastIndexOf('list'))}code/updateDelYn`, {
+                codeSeq: bindObj.codeSeq,
+                delYn: 'Y'
+            });
+            const responseDto = response.data;
+            if (responseDto.code === 200) {
+                alert('삭제 되었습니다.');
+                getChildTableList(bindObj.codeMaster);
+            }
+        }
+    }
+
     return <div className="content-wrapper">
         <div className="container-xxl flex-grow-1 container-p-y">
             <MenuTitle leftMenuInfo={leftMenuInfo}/>
@@ -250,7 +277,7 @@ const CodeMgmtListPage = ({leftMenuInfo, filePath}) => {
                                             마스터</label>
                                         <div className="col-md-10">
                                             <input className="form-control" type="text" name="codeMaster" id="codeMaster"
-                                                   disabled={isNew}/>
+                                                   disabled={!isNew}/>
                                         </div>
                                     </div>
                                     <div className="mb-3 row">
@@ -284,6 +311,10 @@ const CodeMgmtListPage = ({leftMenuInfo, filePath}) => {
                                             <button type="button" className="btn btn-secondary mx-1"
                                                     onClick={addNewMenu}>추가
                                             </button>
+                                            <button type="button"
+                                                    className={`btn btn-warning mx-1 ${isNew ? 'd-none' : ''}`}
+                                                    onClick={del}>삭제
+                                            </button>
                                             <button type="button" className="btn btn-primary" onClick={proc}>저장
                                             </button>
                                         </div>
@@ -299,7 +330,7 @@ const CodeMgmtListPage = ({leftMenuInfo, filePath}) => {
                                             <input className="form-control" type="text" name="codeMaster" id="codeMaster"
                                                    title="코드 마스터"
                                                    required={true}
-                                                   disabled={isNew}/>
+                                                   disabled={!isNew}/>
                                         </div>
                                     </div>
                                     <div className="mb-3 row">
@@ -341,6 +372,10 @@ const CodeMgmtListPage = ({leftMenuInfo, filePath}) => {
                                         <div className="d-flex justify-content-around">
                                             <button type="button" className="btn btn-secondary mx-1"
                                                     onClick={addNewMenu}>추가
+                                            </button>
+                                            <button type="button"
+                                                    className={`btn btn-warning mx-1 ${isNew ? 'd-none' : ''}`}
+                                                    onClick={del}>삭제
                                             </button>
                                             <button type="button" className="btn btn-primary" onClick={proc}>저장
                                             </button>

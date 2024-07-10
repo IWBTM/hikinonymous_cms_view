@@ -19,8 +19,6 @@ const BannerMgmtViewPage = ({leftMenuInfo}) => {
 
     const navigate = useNavigate();
 
-    let imageDelSeqList = [];
-
     useEffect(() => {
         const getPositionList = async () => {
             setPositionList(await getCodeListByCodeMaster('BANNER_POSITION'));
@@ -35,13 +33,13 @@ const BannerMgmtViewPage = ({leftMenuInfo}) => {
         const responseDto = response.data;
         if (responseDto.code === 200) {
             setSelectedPcImageFile({
-                filePath: `${responseDto.data.pcImage.fileApiPath}${responseDto.data.pcImage.fileInfoSeq}`,
+                filePath: `${responseDto.data.pcImage.fileApiViewPath}${responseDto.data.pcImage.fileInfoSeq}`,
                 fileNm: responseDto.data.pcImage.fileOriNm,
                 fileInfoSeq: responseDto.data.pcImage.fileInfoSeq,
                 isExist: true
             });
             setSelectedMoImageFile({
-                filePath: `${responseDto.data.moImage.fileApiPath}${responseDto.data.moImage.fileInfoSeq}`,
+                filePath: `${responseDto.data.moImage.fileApiViewPath}${responseDto.data.moImage.fileInfoSeq}`,
                 fileNm: responseDto.data.moImage.fileOriNm,
                 fileInfoSeq: responseDto.data.moImage.fileInfoSeq,
                 isExist: true
@@ -147,7 +145,6 @@ const BannerMgmtViewPage = ({leftMenuInfo}) => {
             document.getElementById('moImageFile').value = null;
         }
 
-        imageDelSeqList.push(e.currentTarget.value);
     }
 
     return <div className="container-xxl flex-grow-1 container-p-y">

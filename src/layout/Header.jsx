@@ -32,7 +32,7 @@ const Header = (props) => {
                         data-bs-toggle="dropdown"
                        aria-expanded="false">
                         <div className="avatar avatar-online">
-                            <img src="../assets/img/avatars/1.png" alt=""
+                            <img src={`${process.env.PUBLIC_URL}/images/avatars/1.png`} alt=""
                                  className="w-px-40 h-auto rounded-circle"/>
                         </div>
                     </a>
@@ -43,7 +43,7 @@ const Header = (props) => {
                                     <div className="flex-shrink-0 me-3">
                                         <div className="avatar avatar-online">
                                             <img
-                                                src="../assets/img/avatars/1.png"
+                                                src={`${process.env.PUBLIC_URL}/images/avatars/1.png`}
                                                 alt=""
                                                 className="w-px-40 h-auto rounded-circle"/>
                                         </div>
