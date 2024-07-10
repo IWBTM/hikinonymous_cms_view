@@ -47,6 +47,8 @@ import ServiceBoardMgmtListPage from "./pages/serviceBoard/ServiceBoardMgmtListP
 import ServiceBoardMgmtViewPage from "./pages/serviceBoard/ServiceBoardMgmtViewPage";
 import PrivacyMgmtListPage from "./pages/term/PrivacyMgmtListPage";
 import InquiryMgmtViewPage from "./pages/inquiry/InquiryMgmtViewPage";
+import BoardMgmtListPage from "./pages/board/BoardMgmtListPage";
+import BoardMgmtViewPage from "./pages/board/BoardMgmtViewPage";
 
 function App() {
 
@@ -145,6 +147,9 @@ function App() {
                     }
                     case 'NOTICE_MANAGEMENT': {
                         setMenuMgmtRoute(childPages, leftMenu, menu, ServiceBoardMgmtListPage, ServiceBoardMgmtViewPage);
+                    }
+                    case 'BOARD_MANAGEMENT': {
+                        setMenuMgmtRoute(childPages, leftMenu, menu, BoardMgmtListPage, BoardMgmtViewPage);
                     }
                 }
             });

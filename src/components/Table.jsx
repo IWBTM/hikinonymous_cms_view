@@ -18,7 +18,7 @@ const Table = ({leftMenuInfo, columnList, isOnHeader, renderRowCallback, isLoadi
             return <Spinner/>;
         } else {
             return <div className="card">
-                        <h5 className={`card-header ${!isOnHeader ?? 'd-none'}`}>{leftMenuInfo.childNm.substring(0, leftMenuInfo.childNm.lastIndexOf('관리')) + " "}</h5>
+                        <h5 className={`card-header ${!isOnHeader ?? 'd-none'}`}>{leftMenuInfo?.childNm?.substring(0, leftMenuInfo?.childNm.lastIndexOf('관리')) + " "}</h5>
                         <div className="table-responsive text-nowrap">
                             <table className="table">
                                 <thead>

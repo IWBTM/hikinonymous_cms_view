@@ -6,7 +6,7 @@ import Pagination from "../../layout/Pagination";
 import MenuTitle from "../../layout/MenuTitle";
 
 const BannerMgmtListPage = ({leftMenuInfo, filePath}) => {
-    const [tableResult, setTableResultList] = useState({});
+    const [ tableResult, setTableResultList ] = useState({});
 
     const navigate = useNavigate();
 

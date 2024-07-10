@@ -9,7 +9,7 @@ const ServiceBoardMgmtViewPage = ({leftMenuInfo}) => {
     const location = useLocation();
     const { seq, filePath } = location.state;
 
-    const [ serviceBoardDto, setFaqDto ] = useState({});
+    const [ serviceBoardDto, setServiceBoardDto ] = useState({});
 
     const [ selectedPcThumbImageFile, setSelectedPcThumbImageFile ] = useState({});
     const [ selectedMoThumbImageFile, setSelectedMoThumbImageFile ] = useState({});
@@ -22,11 +22,11 @@ const ServiceBoardMgmtViewPage = ({leftMenuInfo}) => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (seq) getFaqView();
+        if (seq) getServiceBoardView();
 
     }, []);
 
-    const getFaqView = async () => {
+    const getServiceBoardView = async () => {
         const response = await api.get(`${filePath}/${seq}`);
         const responseDto = response.data;
         if (responseDto.code === 200) {
@@ -62,7 +62,7 @@ const ServiceBoardMgmtViewPage = ({leftMenuInfo}) => {
                     isExist: true
                 });
             }
-            setFaqDto(responseDto.data);
+            setServiceBoardDto(responseDto.data);
         }
     }
 

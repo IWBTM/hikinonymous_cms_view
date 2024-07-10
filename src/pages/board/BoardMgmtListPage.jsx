@@ -5,7 +5,7 @@ import Table from "../../components/Table";
 import Pagination from "../../layout/Pagination";
 import MenuTitle from "../../layout/MenuTitle";
 
-const ServiceBoardMgmtListPage = ({leftMenuInfo, filePath}) => {
+const BoardMgmtListPage = ({leftMenuInfo, filePath}) => {
     const [ tableResult, setTableResultList ] = useState({});
 
     const navigate = useNavigate();
@@ -26,11 +26,15 @@ const ServiceBoardMgmtListPage = ({leftMenuInfo, filePath}) => {
         if (!tableResult.empty && tableResult.content) {
             return tableResult.content.map((row, index) => {
                 let rowNum = (tableResult.totalElements - tableResult.totalPages) * (tableResult.number + index + 1);
-                return <tr className="cursor-pointer" id={row.serviceBoardSeq} onClick={goView} key={index}>
+                return <tr className="cursor-pointer" id={row.boardSeq} onClick={goView} key={index}>
                     <th scope="row">{rowNum}</th>
                     <td>{row.title}</td>
-                    <td>{row.useYn == 'Y' ? '사용' : '미사용'}</td>
+                    <td>{row.category.categoryName}</td>
+                    <td>{row.viewCnt}</td>
+                    <td>{row.replyCnt}</td>
+                    <td>{row.delYn == 'Y' ? '삭제' : '미삭제'}</td>
                     <td>{row.registerNm}</td>
+                    <td>{row.registerNickName}</td>
                     <td>{row.regDate}</td>
                 </tr>;
             }).reverse();
@@ -40,11 +44,6 @@ const ServiceBoardMgmtListPage = ({leftMenuInfo, filePath}) => {
     const goView = (e) => {
         let viewPath = `${filePath.substring(0, filePath.lastIndexOf('list'))}view`;
         navigate(viewPath, {state: {seq: e.currentTarget.id, filePath: viewPath}})
-    }
-
-    const goWrite = () => {
-        let viewPath = `${filePath.substring(0, filePath.lastIndexOf('list'))}view`;
-        navigate(viewPath , { state: { filePath: viewPath } })
     }
 
     return (
@@ -58,8 +57,12 @@ const ServiceBoardMgmtListPage = ({leftMenuInfo, filePath}) => {
             <Table
                 columnList={[
                     '제목',
-                    '사용 여부',
+                    '카테고리',
+                    '조회 수',
+                    '댓글 수',
+                    '삭제 여부',
                     '작성자',
+                    '별명',
                     '작성일'
                 ]}
                 leftMenuInfo={leftMenuInfo}
@@ -68,11 +71,8 @@ const ServiceBoardMgmtListPage = ({leftMenuInfo, filePath}) => {
             />
 
             <Pagination tableResult={tableResult}/>
-            <div className="d-flex justify-content-end container-p-y">
-                <button type="button" className="btn btn-primary" onClick={goWrite}>등록</button>
-            </div>
         </div>
     );
 }
 
-export default ServiceBoardMgmtListPage;
+export default BoardMgmtListPage;
