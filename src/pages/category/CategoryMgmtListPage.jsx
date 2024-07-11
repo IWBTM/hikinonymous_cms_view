@@ -2,15 +2,18 @@ import {useEffect, useRef, useState} from "react";
 import api from "../../api/api";
 import Table from "../../components/Table";
 import MenuTitle from "../../layout/MenuTitle";
+import Pagination from "../../layout/Pagination";
 
 const CategoryMgmtListPage = ({leftMenuInfo, filePath}) => {
     const [ parentTableResult, setParentTableResultList ] = useState({});
     const [ registerDto, setRegisterDto ] = useState({});
+    const [ isLoadingOfTable, setIsLoadingOfTable ] = useState({});
+
+    const searchFormRef = useRef();
 
     const formRef = useRef();
 
     useEffect(() => {
-
         getParentTableResultList();
     }, []);
 
@@ -54,8 +57,11 @@ const CategoryMgmtListPage = ({leftMenuInfo, filePath}) => {
     }
 
     const getParentTableResultList = async () => {
-        const response = await api.get(`${filePath}/1`);
+        setIsLoadingOfTable(true);
+        const params = new URLSearchParams(new FormData(searchFormRef.current));
+        const response = await api.get(`${filePath}/1?${params.toString()}`);
         const responseData = response.data;
+        setIsLoadingOfTable(false);
         if (responseData.code === 200) {
             setParentTableResultList(responseData.data);
         }
@@ -64,7 +70,7 @@ const CategoryMgmtListPage = ({leftMenuInfo, filePath}) => {
     const renderParentRows = () => {
         if (!parentTableResult.empty && parentTableResult.content) {
             return parentTableResult.content.map((row, index) => {
-                let rowNum = (parentTableResult.totalElements - parentTableResult.totalPages) * (parentTableResult.number + index + 1);
+                let rowNum = parentTableResult.totalElements - (parentTableResult.number * parentTableResult.size) - (parentTableResult.numberOfElements) + (parentTableResult.content.length - index);
                 return <tr className="cursor-pointer" id={row.categorySeq} bindObj={JSON.stringify(row)}
                            onClick={clickParentRow} key={index}>
                     <th scope="row">{rowNum}</th>
@@ -74,7 +80,7 @@ const CategoryMgmtListPage = ({leftMenuInfo, filePath}) => {
                     <th scope="row">{row.sortOrder}</th>
                     <th scope="row">{row.regDate}</th>
                 </tr>;
-            }).reverse();
+            });
         }
     }
 
@@ -124,6 +130,9 @@ const CategoryMgmtListPage = ({leftMenuInfo, filePath}) => {
                     <div className="card mb-4">
                         <div className="card-body">
                             <div>
+                                <form ref={searchFormRef}>
+                                    <input name="page" id="page" type="hidden"/>
+                                </form>
                                 <Table
                                     columnList={[
                                         '카테고리명',
@@ -134,11 +143,14 @@ const CategoryMgmtListPage = ({leftMenuInfo, filePath}) => {
                                     ]}
                                     leftMenuInfo={leftMenuInfo}
                                     isOnHeader={false}
+                                    isLoading={isLoadingOfTable}
                                     renderRowCallback={renderParentRows}
                                 />
+
                             </div>
                         </div>
                     </div>
+                    <Pagination tableResult={parentTableResult} getResultCallback={getParentTableResultList}/>
                 </div>
 
                 <div className="col-xl-12">

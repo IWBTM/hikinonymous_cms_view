@@ -2,6 +2,7 @@ import {useEffect, useRef, useState} from "react";
 import api from "../../api/api";
 import Table from "../../components/Table";
 import MenuTitle from "../../layout/MenuTitle";
+import Pagination from "../../layout/Pagination";
 
 const CmsMenuMgmtListPage = ({leftMenuInfo, filePath}) => {
     const [ parentTableResult, setParentTableResultList ] = useState({});
@@ -9,11 +10,13 @@ const CmsMenuMgmtListPage = ({leftMenuInfo, filePath}) => {
 
     const [ isLoadingOfParent, setIsLoadingOfParent ] = useState(false);
     const [ isLoadingOfChild, setIsLoadingOfChild ] = useState(false);
+
+    const searchParentFormRef = useRef();
+    const searchChildFormRef = useRef();
     
     const formRef = useRef();
 
     useEffect(() => {
-
         getParentTableResultList();
     }, []);
 
@@ -58,7 +61,8 @@ const CmsMenuMgmtListPage = ({leftMenuInfo, filePath}) => {
 
     const getParentTableResultList = async () => {
         setIsLoadingOfParent(true);
-        const response = await api.get(`${filePath}/1`);
+        const params = new URLSearchParams(new FormData(searchParentFormRef.current));
+        const response = await api.get(`${filePath}/1?${params.toString()}`);
         setIsLoadingOfParent(false);
         const responseData = response.data;
         if (responseData.code === 200) {
@@ -68,7 +72,8 @@ const CmsMenuMgmtListPage = ({leftMenuInfo, filePath}) => {
 
     const getChildTableList = async (authDir) => {
         setIsLoadingOfChild(true);
-        const response = await api.get(`${filePath}/2?authDir=${authDir}`);
+        const params = new URLSearchParams(new FormData(searchChildFormRef.current));
+        const response = await api.get(`${filePath}/2?${params.toString()}&authDir=${authDir}`);
         setIsLoadingOfChild(false);
         const responseData = response.data;
         if (responseData.code === 200) {
@@ -79,7 +84,7 @@ const CmsMenuMgmtListPage = ({leftMenuInfo, filePath}) => {
     const renderParentRows = () => {
         if (!parentTableResult.empty && parentTableResult.content) {
             return parentTableResult.content.map((row, index) => {
-                let rowNum = (parentTableResult.totalElements - parentTableResult.totalPages) * (parentTableResult.number + index + 1);
+                let rowNum = parentTableResult.totalElements - (parentTableResult.number * parentTableResult.size) - (parentTableResult.numberOfElements) + (parentTableResult.content.length - index);
                 return <tr className="cursor-pointer" id={row.managerSeq} authDir={row.authDir} bindObj={JSON.stringify(row)} onClick={clickParentRow} key={index}>
                     <th scope="row">{rowNum}</th>
                     <th scope="row">{row.menuNm}</th>
@@ -87,14 +92,14 @@ const CmsMenuMgmtListPage = ({leftMenuInfo, filePath}) => {
                     <th scope="row">{row.filePath ? row.filePath : '-'}</th>
                     <th scope="row">{row.sortOrder}</th>
                 </tr>;
-            }).reverse();
+            });
         }
     }
 
     const renderChildRows = () => {
         if (!childTableResult.empty && childTableResult.content) {
             return childTableResult.content.map((row, index) => {
-                let rowNum = (childTableResult.totalElements - childTableResult.totalPages) * (childTableResult.number + index + 1);
+                let rowNum = childTableResult.totalElements - (childTableResult.number * childTableResult.size) - (childTableResult.numberOfElements) + (childTableResult.content.length - index);
                 return <tr className="cursor-pointer" id={row.managerSeq} bindObj={JSON.stringify(row)} onClick={clickChildRow} key={index}>
                     <th scope="row">{rowNum}</th>
                     <th scope="row">{row.menuNm}</th>
@@ -102,7 +107,7 @@ const CmsMenuMgmtListPage = ({leftMenuInfo, filePath}) => {
                     <th scope="row">{row.filePath}</th>
                     <th scope="row">{row.sortOrder}</th>
                 </tr>;
-            }).reverse();
+            });
         }
     }
 
@@ -155,6 +160,9 @@ const CmsMenuMgmtListPage = ({leftMenuInfo, filePath}) => {
                 <div className="col-md-6">
                     <div className="card mb-4">
                         <div className="card-body">
+                            <form ref={searchParentFormRef}>
+                                <input name="page" id="page" type="hidden"/>
+                            </form>
                             <div>
                                 <Table
                                     columnList={[
@@ -168,13 +176,19 @@ const CmsMenuMgmtListPage = ({leftMenuInfo, filePath}) => {
                                     renderRowCallback={renderParentRows}
                                     isLoading={isLoadingOfParent}
                                 />
+
+                                <Pagination tableResult={parentTableResult}
+                                            getResultCallback={getParentTableResultList}/>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div className="col-md-6">
-                    <div className="card mb-4">
+                <div className="card mb-4">
                         <div className="card-body">
+                            <form ref={searchChildFormRef}>
+                                <input name="page" id="page" type="hidden"/>
+                            </form>
                             <div>
                                 <Table
                                     columnList={[
@@ -188,13 +202,15 @@ const CmsMenuMgmtListPage = ({leftMenuInfo, filePath}) => {
                                     renderRowCallback={renderChildRows}
                                     isLoading={isLoadingOfChild}
                                 />
+
+                                <Pagination tableResult={childTableResult} getResultCallback={getChildTableList}/>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div className="col-xl-12">
-                    <div className="card mb-4">
+                <div className="card mb-4">
                         <div className="card-body">
                             <div className="mb-2">
                                 <small className="text-light fw-medium">폴더가 같아야 상위/하위 메뉴 관계가 형성 됩니다.</small>

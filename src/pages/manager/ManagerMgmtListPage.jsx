@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import api from "../../api/api";
 import {useNavigate} from "react-router-dom";
 import Table from "../../components/Table";
@@ -7,25 +7,31 @@ import MenuTitle from "../../layout/MenuTitle";
 
 const ManagerMgmtListPage = ({leftMenuInfo, filePath}) => {
     const [ tableResult, setTableResultList ] = useState({});
+    const [ isLoadingOfTable, setIsLoadingOfTable ] = useState({});
+
+    const searchFormRef = useRef();
 
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const getTableResultList = async () => {
-            const response = await api.get(filePath);
-            const responseData = response.data;
-            if (responseData.code === 200) {
-                setTableResultList(responseData.data);
-            }
-        };
+    const getTableResultList = async () => {
+        setIsLoadingOfTable(true);
+        const params = new URLSearchParams(new FormData(searchFormRef.current));
+        const response = await api.get(`${filePath}?${params.toString()}`);
+        const responseData = response.data;
+        if (responseData.code === 200) {
+            setIsLoadingOfTable(false);
+            setTableResultList(responseData.data);
+        }
+    };
 
+    useEffect(() => {
         getTableResultList();
     }, []);
 
     const renderRows = () => {
         if (!tableResult.empty && tableResult.content) {
             return tableResult.content.map((row, index) => {
-                let rowNum = (tableResult.totalElements - tableResult.totalPages) * (tableResult.number + index + 1);
+                let rowNum = tableResult.totalElements - (tableResult.number * tableResult.size) - (tableResult.numberOfElements) + (tableResult.content.length - index);
                 return <tr className="cursor-pointer" id={row.managerSeq} onClick={goView} key={index}>
                     <th scope="row">{rowNum}</th>
                     <td>{row.managerNm}</td>
@@ -35,7 +41,7 @@ const ManagerMgmtListPage = ({leftMenuInfo, filePath}) => {
                     <td>{row.lastLoginDate}</td>
                     <td>{row.regDate}</td>
                 </tr>;
-            }).reverse();
+            });
         }
     }
 
@@ -71,7 +77,7 @@ const ManagerMgmtListPage = ({leftMenuInfo, filePath}) => {
                 renderRowCallback={renderRows}
             />
 
-            <Pagination tableResult={tableResult}/>
+            <Pagination tableResult={tableResult} getResultCallback={getTableResultList}/>
             <div className="d-flex justify-content-end container-p-y">
                 <button type="button" className="btn btn-primary" onClick={goWrite}>등록</button>
             </div>

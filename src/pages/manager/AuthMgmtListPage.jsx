@@ -2,6 +2,7 @@ import {useEffect, useRef, useState} from "react";
 import api from "../../api/api";
 import Table from "../../components/Table";
 import MenuTitle from "../../layout/MenuTitle";
+import Pagination from "../../layout/Pagination";
 
 const AuthMgmtListPage = ({leftMenuInfo, filePath}) => {
     const [ managerTableResult, setManagerTableResult ] = useState({});
@@ -18,26 +19,33 @@ const AuthMgmtListPage = ({leftMenuInfo, filePath}) => {
     const [ isLoadingOfParent, setIsLoadingOfParent ] = useState(false);
     const [ isLoadingOfChild, setIsLoadingOfChild ] = useState(false);
 
+    const searchManagerFormRef = useRef();
+    const searchAuthParentFormRef = useRef();
+    const searchAuthChildFormRef = useRef();
+    const searchParentFormRef = useRef();
+    const searchChildFormRef = useRef();
+
     const formRef = useRef();
 
     useEffect(() => {
-        const getManagerTableResultList = async () => {
-            setIsLoadingOfManager(true);
-            const response = await api.get('/cms/admin/manager/list');
-            setIsLoadingOfManager(false);
-            const responseData = response.data;
-            if (responseData.code === 200) {
-                setManagerTableResult(responseData.data);
-            }
-        };
-
         getManagerTableResultList();
     }, []);
+
+    const getManagerTableResultList = async () => {
+        setIsLoadingOfManager(true);
+        const params = new URLSearchParams(new FormData(searchManagerFormRef.current));
+        const response = await api.get(`/cms/admin/manager/list?${params.toString()}`);
+        setIsLoadingOfManager(false);
+        const responseData = response.data;
+        if (responseData.code === 200) {
+            setManagerTableResult(responseData.data);
+        }
+    };
 
     const renderRows = () => {
         if (!managerTableResult.empty && managerTableResult.content) {
             return managerTableResult.content.map((row, index) => {
-                let rowNum = (managerTableResult.totalElements - managerTableResult.totalPages) * (managerTableResult.number + index + 1);
+                let rowNum = managerTableResult.totalElements - (managerTableResult.number * managerTableResult.size) - (managerTableResult.numberOfElements) + (managerTableResult.content.length - index);
                 return <tr className="cursor-pointer" id={row.managerSeq} bindObj={JSON.stringify(row)} onClick={clickManagerRow} key={index}>
                     <th scope="row">{rowNum}</th>
                     <td>{row.managerNm}</td>
@@ -107,7 +115,8 @@ const AuthMgmtListPage = ({leftMenuInfo, filePath}) => {
     const getParentTableList = async () => {
         const managerSeq = document.getElementById('managerSeq').value;
         setIsLoadingOfParent(true);
-        const response = await api.get(`/cms/admin/auth/menu/list/${managerSeq}?isExist=false`);
+        const params = new URLSearchParams(new FormData(searchParentFormRef.current));
+        const response = await api.get(`/cms/admin/auth/menu/list/${managerSeq}?${params.toString()}&isExist=false`);
         setIsLoadingOfParent(false);
         const responseData = response.data;
         if (responseData.code === 200) {
@@ -119,7 +128,8 @@ const AuthMgmtListPage = ({leftMenuInfo, filePath}) => {
         const managerSeq = document.getElementById('managerSeq').value;
         const authDir = document.getElementById('authDir').value;
         setIsLoadingOfChild(true);
-        const response = await api.get(`/cms/admin/auth/menu/list/${managerSeq}?authDir=${authDir}&isExist=false`);
+        const params = new URLSearchParams(new FormData(searchChildFormRef.current));
+        const response = await api.get(`/cms/admin/auth/menu/list/${managerSeq}?${params.toString()}&authDir=${authDir}&isExist=false`);
         setIsLoadingOfChild(false);
         const responseData = response.data;
         if (responseData.code === 200) {
@@ -130,7 +140,8 @@ const AuthMgmtListPage = ({leftMenuInfo, filePath}) => {
     const getParentAuthTableList = async () => {
         const managerSeq = document.getElementById('managerSeq').value;
         setIsLoadingOfAuthParent(true);
-        const response = await api.get(`/cms/admin/auth/menu/list/${managerSeq}?isExist=true`);
+        const params = new URLSearchParams(new FormData(searchAuthParentFormRef.current));
+        const response = await api.get(`/cms/admin/auth/menu/list/${managerSeq}?${params.toString()}&isExist=true`);
         setIsLoadingOfAuthParent(false);
         const responseData = response.data;
         if (responseData.code === 200) {
@@ -142,7 +153,8 @@ const AuthMgmtListPage = ({leftMenuInfo, filePath}) => {
         const managerSeq = document.getElementById('managerSeq').value;
         const authDir = document.getElementById('authDir').value;
         setIsLoadingOfAuthChild(true);
-        const response = await api.get(`/cms/admin/auth/menu/list/${managerSeq}?authDir=${authDir}&isExist=true`);
+        const params = new URLSearchParams(new FormData(searchAuthChildFormRef.current));
+        const response = await api.get(`/cms/admin/auth/menu/list/${managerSeq}?${params.toString()}&authDir=${authDir}&isExist=true`);
         setIsLoadingOfAuthChild(false);
         const responseData = response.data;
         if (responseData.code === 200) {
@@ -151,9 +163,9 @@ const AuthMgmtListPage = ({leftMenuInfo, filePath}) => {
     }
 
     const renderParentAuthRows = () => {
-        if (parentAuthTableResult.length && !parentAuthTableResult.empty) {
-            return parentAuthTableResult.map((row, index) => {
-                let rowNum = index + 1;
+        if (parentAuthTableResult.content && !parentAuthTableResult.empty) {
+            return parentAuthTableResult.content.map((row, index) => {
+                let rowNum = parentAuthTableResult.totalElements - (parentAuthTableResult.number * parentAuthTableResult.size) - (parentAuthTableResult.numberOfElements) + (parentAuthTableResult.content.length - index);
                 return <tr className="cursor-pointer" bindObj={JSON.stringify(row)}
                            onClick={clickParentAuthRow} key={index}>
                     <th scope="row">{rowNum}</th>
@@ -165,9 +177,9 @@ const AuthMgmtListPage = ({leftMenuInfo, filePath}) => {
     }
 
     const renderChildAuthRows = () => {
-        if (childAuthTableResult.length && !childAuthTableResult.empty) {
-            return childAuthTableResult.map((row, index) => {
-                let rowNum = index + 1;
+        if (childAuthTableResult.content && !childAuthTableResult.empty) {
+            return childAuthTableResult.content.map((row, index) => {
+                let rowNum = childAuthTableResult.totalElements - (childAuthTableResult.number * childAuthTableResult.size) - (childAuthTableResult.numberOfElements) + (childAuthTableResult.content.length - index);
                 return <tr className="cursor-pointer" bindObj={JSON.stringify(row)} onClick={clickChildRow} key={index}>
                     <th scope="row">{rowNum}</th>
                     <th scope="row">{row.menuNm}</th>
@@ -178,9 +190,9 @@ const AuthMgmtListPage = ({leftMenuInfo, filePath}) => {
     }
 
     const renderParentRows = () => {
-        if (parentTableResult.length && !parentTableResult.empty) {
-            return parentTableResult.map((row, index) => {
-                let rowNum = index + 1;
+        if (parentTableResult.content && !parentTableResult.empty) {
+            return parentTableResult.content.map((row, index) => {
+                let rowNum = parentTableResult.totalElements - (parentTableResult.number * parentTableResult.size) - (parentTableResult.numberOfElements) + (parentTableResult.content.length - index);
                 return <tr className="cursor-pointer" bindObj={JSON.stringify(row)}
                            onClick={clickParentRow} key={index}>
                     <th scope="row">{rowNum}</th>
@@ -191,9 +203,9 @@ const AuthMgmtListPage = ({leftMenuInfo, filePath}) => {
     }
 
     const renderChildRows = () => {
-        if (childTableResult.length && !childTableResult.empty) {
-            return childTableResult.map((row, index) => {
-                let rowNum = index + 1;
+        if (childTableResult.content && !childTableResult.empty) {
+            return childTableResult.content.map((row, index) => {
+                let rowNum = childTableResult.totalElements - (childTableResult.number * childTableResult.size) - (childTableResult.numberOfElements) + (childTableResult.content.length - index);
                 return <tr className="cursor-pointer" bindObj={JSON.stringify(row)} onClick={clickChildRow} key={index}>
                     <th scope="row">{rowNum}</th>
                     <th scope="row">{row.menuNm}</th>
@@ -311,6 +323,10 @@ const AuthMgmtListPage = ({leftMenuInfo, filePath}) => {
 
     return <div className="content-wrapper">
         <div className="container-xxl flex-grow-1 container-p-y">
+            <form ref={searchManagerFormRef}>
+                <input name="page" id="page" type="hidden"/>
+            </form>
+
             <MenuTitle leftMenuInfo={leftMenuInfo}/>
 
             <Table
@@ -325,12 +341,16 @@ const AuthMgmtListPage = ({leftMenuInfo, filePath}) => {
                 isLoading={isLoadingOfManager}
             />
 
+            <Pagination tableResult={managerTableResult} getResultCallback={getManagerTableResultList}/>
             <div className="row my-4">
                 <div className="col-md-6">
                     <div className="card mb-4">
                         <div className="card-body">
                             <div className="mb-2">
                                 <small className="text-light fw-medium">현재 권한이 없는 상위 메뉴 입니다.</small>
+                                <form ref={searchParentFormRef}>
+                                    <input name="page" id="page" type="hidden"/>
+                                </form>
                             </div>
                             <div>
                                 <Table
@@ -345,12 +365,16 @@ const AuthMgmtListPage = ({leftMenuInfo, filePath}) => {
                             </div>
                         </div>
                     </div>
+                    <Pagination tableResult={parentTableResult} getResultCallback={getParentTableList}/>
                 </div>
                 <div className="col-md-6">
                     <div className="card mb-4">
                         <div className="card-body">
                             <div className="mb-2">
                                 <small className="text-light fw-medium">현재 권한이 없는 하위 메뉴 입니다.</small>
+                                <form ref={searchChildFormRef}>
+                                    <input name="page" id="page" type="hidden"/>
+                                </form>
                             </div>
                             <div>
                                 <Table
@@ -365,6 +389,7 @@ const AuthMgmtListPage = ({leftMenuInfo, filePath}) => {
                             </div>
                         </div>
                     </div>
+                    <Pagination tableResult={childTableResult} getResultCallback={getChildTableList}/>
                 </div>
 
                 <div className="col-md-6">
@@ -372,6 +397,9 @@ const AuthMgmtListPage = ({leftMenuInfo, filePath}) => {
                         <div className="card-body">
                             <div className="mb-2">
                                 <small className="text-light fw-medium">현재 권한이 있는 상위 메뉴 입니다.</small>
+                                <form ref={searchAuthParentFormRef}>
+                                    <input name="page" id="page" type="hidden"/>
+                                </form>
                             </div>
                             <div>
                                 <Table
@@ -387,12 +415,16 @@ const AuthMgmtListPage = ({leftMenuInfo, filePath}) => {
                             </div>
                         </div>
                     </div>
+                    <Pagination tableResult={parentAuthTableResult} getResultCallback={getParentAuthTableList}/>
                 </div>
                 <div className="col-md-6">
                     <div className="card mb-4">
                         <div className="card-body">
                             <div className="mb-2">
                                 <small className="text-light fw-medium">현재 권한이 있는 하위 메뉴 입니다.</small>
+                                <form ref={searchAuthChildFormRef}>
+                                    <input name="page" id="page" type="hidden"/>
+                                </form>
                             </div>
                             <div>
                                 <Table
@@ -408,11 +440,12 @@ const AuthMgmtListPage = ({leftMenuInfo, filePath}) => {
                             </div>
                         </div>
                     </div>
+                    <Pagination tableResult={childAuthTableResult} getResultCallback={getChildAuthTableList}/>
                 </div>
 
                 <div className="col-xl-12">
                     <div className="card mb-4">
-                    <div className="card-body">
+                        <div className="card-body">
                             <div className="mb-2">
                                 <small className="text-light fw-medium">새로 고침 후 적용 됩니다.</small>
                             </div>
@@ -471,7 +504,7 @@ const AuthMgmtListPage = ({leftMenuInfo, filePath}) => {
                                     </div>
                                 </div>
                             </form>
-                    </div>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -2,6 +2,7 @@ import {useEffect, useRef, useState} from "react";
 import api from "../../api/api";
 import Table from "../../components/Table";
 import MenuTitle from "../../layout/MenuTitle";
+import Pagination from "../../layout/Pagination";
 
 const PrivacyMgmtListPage = ({leftMenuInfo, filePath}) => {
     const [ parentTableResult, setParentTableResultList ] = useState({});
@@ -12,6 +13,7 @@ const PrivacyMgmtListPage = ({leftMenuInfo, filePath}) => {
     const [ isLoadingOfParent, setIsLoadingOfParent ] = useState(false);
 
     const formRef = useRef();
+    const searchFormRef = useRef();
 
     useEffect(() => {
         getParentTableResultList();
@@ -72,7 +74,8 @@ const PrivacyMgmtListPage = ({leftMenuInfo, filePath}) => {
 
     const getParentTableResultList = async () => {
         setIsLoadingOfParent(true);
-        const response = await api.get(`${filePath}`);
+        const params = new URLSearchParams(new FormData(searchFormRef.current));
+        const response = await api.get(`${filePath}?${params.toString()}`);
         setIsLoadingOfParent(false);
         const responseData = response.data;
         if (responseData.code === 200) {
@@ -83,7 +86,7 @@ const PrivacyMgmtListPage = ({leftMenuInfo, filePath}) => {
     const renderParentRows = () => {
         if (parentTableResult && parentTableResult.content) {
             return parentTableResult.content.map((row, index) => {
-                let rowNum = (parentTableResult.totalElements - parentTableResult.totalPages) * (parentTableResult.number + index + 1);
+                let rowNum = parentTableResult.totalElements - (parentTableResult.number * parentTableResult.size) - (parentTableResult.numberOfElements) + (parentTableResult.content.length - index);
                 return <tr className="cursor-pointer" id={row.serviceBoardSeq} bindObj={JSON.stringify(row)}
                            onClick={clickParentRow} key={index}>
                     <th scope="row">{rowNum}</th>
@@ -92,7 +95,7 @@ const PrivacyMgmtListPage = ({leftMenuInfo, filePath}) => {
                     <th scope="row">{row.useYn == 'Y' ? '사용' : '미사용'}</th>
                     <th scope="row">{row.regDate}</th>
                 </tr>;
-            }).reverse();
+            });
         }
     }
 
@@ -154,6 +157,9 @@ const PrivacyMgmtListPage = ({leftMenuInfo, filePath}) => {
                 <div className="col-md-12 mb-2">
                     <div className="card mb-12">
                         <div className="card-body">
+                            <form ref={searchFormRef}>
+                                <input name="page" id="page" type="hidden"/>
+                            </form>
                             <div>
                                 <Table
                                     columnList={[
@@ -170,6 +176,7 @@ const PrivacyMgmtListPage = ({leftMenuInfo, filePath}) => {
                             </div>
                         </div>
                     </div>
+                    <Pagination tableResult={parentTableResult} getResultCallback={getParentTableResultList}/>
                 </div>
 
                 <div className="col-xl-12">

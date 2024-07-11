@@ -2,6 +2,7 @@ import {useEffect, useRef, useState} from "react";
 import api from "../../api/api";
 import Table from "../../components/Table";
 import MenuTitle from "../../layout/MenuTitle";
+import Pagination from "../../layout/Pagination";
 
 const CodeMgmtListPage = ({leftMenuInfo, filePath}) => {
     const [ parentTableResult, setParentTableResultList ] = useState({});
@@ -15,6 +16,8 @@ const CodeMgmtListPage = ({leftMenuInfo, filePath}) => {
     const [ isLoadingOfChild, setIsLoadingOfChild ] = useState(false);
 
     const formRef = useRef();
+    const searchParentFormRef = useRef();
+    const searchChildFormRef = useRef();
 
     useEffect(() => {
         getParentTableResultList();
@@ -79,7 +82,8 @@ const CodeMgmtListPage = ({leftMenuInfo, filePath}) => {
 
     const getParentTableResultList = async () => {
         setIsLoadingOfParent(true);
-        const response = await api.get(`${filePath}`);
+        const params = new URLSearchParams(new FormData(searchParentFormRef.current));
+        const response = await api.get(`${filePath}?${params.toString()}`);
         setIsLoadingOfParent(false);
         const responseData = response.data;
         if (responseData.code === 200) {
@@ -89,7 +93,8 @@ const CodeMgmtListPage = ({leftMenuInfo, filePath}) => {
 
     const getChildTableList = async (codeMaster) => {
         setIsLoadingOfChild(true);
-        const response = await api.get(`${filePath}?codeMaster=${codeMaster}`);
+        const params = new URLSearchParams(new FormData(searchChildFormRef.current));
+        const response = await api.get(`${filePath}?${params.toString()}&codeMaster=${codeMaster}`);
         setIsLoadingOfChild(false);
         const responseData = response.data;
         if (responseData.code === 200) {
@@ -100,27 +105,27 @@ const CodeMgmtListPage = ({leftMenuInfo, filePath}) => {
     const renderParentRows = () => {
         if (parentTableResult && parentTableResult.content) {
             return parentTableResult.content.map((row, index) => {
-                let rowNum = (parentTableResult.totalElements - parentTableResult.totalPages) * (parentTableResult.number + index + 1);
+                let rowNum = parentTableResult.totalElements - (parentTableResult.number * parentTableResult.size) - (parentTableResult.numberOfElements) + (parentTableResult.content.length - index);
                 return <tr className="cursor-pointer" id={row.codeMaster} codeMaster={row.codeMaster} bindObj={JSON.stringify(row)} onClick={clickParentRow} key={index}>
                     <th scope="row">{rowNum}</th>
                     <th scope="row">{row.codeMaster}</th>
                     <th scope="row">{row.codeMasterNm}</th>
                 </tr>;
-            }).reverse();
+            });
         }
     }
 
     const renderChildRows = () => {
         if (childTableResult && childTableResult.content) {
             return childTableResult.content.map((row, index) => {
-                let rowNum = (childTableResult.totalElements - childTableResult.totalPages) * (childTableResult.number + index + 1);
+                let rowNum = childTableResult.totalElements - (childTableResult.number * childTableResult.size) - (childTableResult.numberOfElements) + (childTableResult.content.length - index);
                 return <tr className="cursor-pointer" id={row.codeSeq} bindObj={JSON.stringify(row)} onClick={clickChildRow} key={index}>
                     <th scope="row">{rowNum}</th>
                     <th scope="row">{row.code}</th>
                     <th scope="row">{row.codeNm}</th>
                     <th scope="row">{row.sortOrder}</th>
                 </tr>;
-            }).reverse();
+            });
         }
     }
 
@@ -212,6 +217,9 @@ const CodeMgmtListPage = ({leftMenuInfo, filePath}) => {
                 <div className="col-md-6">
                     <div className="card mb-4">
                         <div className="card-body">
+                            <form ref={searchParentFormRef}>
+                                <input name="page" id="page" type="hidden"/>
+                            </form>
                             <div>
                                 <Table
                                     columnList={[
@@ -226,10 +234,14 @@ const CodeMgmtListPage = ({leftMenuInfo, filePath}) => {
                             </div>
                         </div>
                     </div>
+                    <Pagination tableResult={parentTableResult} getResultCallback={getParentTableResultList}/>
                 </div>
                 <div className="col-md-6">
                     <div className="card mb-4">
                         <div className="card-body">
+                            <form ref={searchChildFormRef}>
+                                <input name="page" id="page" type="hidden"/>
+                            </form>
                             <div>
                                 <Table
                                     columnList={[
@@ -245,10 +257,11 @@ const CodeMgmtListPage = ({leftMenuInfo, filePath}) => {
                             </div>
                         </div>
                     </div>
+                    <Pagination tableResult={childTableResult} getResultCallback={getChildTableList}/>
                 </div>
 
                 <div className="col-xl-12">
-                <div className="card mb-4">
+                    <div className="card mb-4">
                     <div className="card-body">
                         <div className="mb-2">
                             <small className="text-light fw-medium">코드 마스터가 같아야 상위/하위 코드 관계가 형성됩니다.</small>

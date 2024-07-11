@@ -16,7 +16,7 @@ const BoardMgmtViewPage = ({leftMenuInfo}) => {
     const [ tableResult, setTableResultList ] = useState({});
     const [ isLoadingOfTable, setIsLoadingOfTable ] = useState({});
 
-    const formRef = useRef();
+    const searchFormRef = useRef();
 
     const navigate = useNavigate();
 
@@ -37,7 +37,8 @@ const BoardMgmtViewPage = ({leftMenuInfo}) => {
 
     const getReplyList = async () => {
         setIsLoadingOfTable(true);
-        const response = await api.get(`${filePath.substring(0, filePath.lastIndexOf('board/view'))}reply/list/${seq}`);
+        const params = new URLSearchParams(new FormData(searchFormRef.current));
+        const response = await api.get(`${filePath.substring(0, filePath.lastIndexOf('board/view'))}reply/list/${seq}?${params.toString()}`);
         const responseDto = response.data;
         if (responseDto.code === 200) {
             setIsLoadingOfTable(false);
@@ -64,7 +65,6 @@ const BoardMgmtViewPage = ({leftMenuInfo}) => {
 
     const delReply = async (e) => {
         const seq = e.currentTarget.value;
-        console.log('seq:: ', seq)
         const response = await api.post(`${filePath.substring(0, filePath.lastIndexOf('board/view'))}reply/updateDelYn`, {
             replySeq: seq,
             delYn: 'Y'
@@ -80,7 +80,7 @@ const BoardMgmtViewPage = ({leftMenuInfo}) => {
     const renderRows = () => {
         if (!tableResult.empty && tableResult.content) {
             return tableResult.content.map((row, index) => {
-                let rowNum = (tableResult.totalElements - tableResult.totalPages) * (tableResult.number + index + 1);
+                let rowNum = tableResult.totalElements - (tableResult.number * tableResult.size) - (tableResult.numberOfElements) + (tableResult.content.length - index);
                 return <tr className="cursor-pointer" key={index}>
                     <th scope="row">{rowNum}</th>
                     <td>{row.content}</td>
@@ -92,7 +92,7 @@ const BoardMgmtViewPage = ({leftMenuInfo}) => {
                         <button type="button" value={row.replySeq} className="btn btn-danger mx-2" onClick={delReply}>삭제</button>
                     </td>
                 </tr>;
-            }).reverse();
+            });
         }
     }
 
@@ -102,48 +102,46 @@ const BoardMgmtViewPage = ({leftMenuInfo}) => {
             <div className="col-xl-12">
                 <div className="card mb-4">
                     <div className="card-body">
-                        <form id="procForm" ref={formRef}>
-                            <input name="boardSeq" defaultValue={boardDto.boardSeq} type="hidden"/>
-                            <div className="mb-3 row">
-                                <label htmlFor="html5-text-input" className="col-md-2 col-form-label">제목</label>
-                                <div className="col-md-10">
-                                    <input className="form-control" type="text" defaultValue={boardDto.title}
-                                           id="html5-text-input" name="title" title="제목" required={true}/>
-                                </div>
+                        <input name="boardSeq" defaultValue={boardDto.boardSeq} type="hidden"/>
+                        <div className="mb-3 row">
+                            <label htmlFor="html5-text-input" className="col-md-2 col-form-label">제목</label>
+                            <div className="col-md-10">
+                                <input className="form-control" type="text" defaultValue={boardDto.title}
+                                       id="html5-text-input" name="title" title="제목" required={true}/>
                             </div>
-                            <div className="mb-3 row">
-                                <label htmlFor="html5-text-input" className="col-md-2 col-form-label">내용</label>
-                                <div className="col-md-10">
-                                    <input className="form-control" type="text" defaultValue={boardDto.content}
-                                           id="html5-text-input" name="content" title="내용" required={true}/>
-                                </div>
+                        </div>
+                        <div className="mb-3 row">
+                            <label htmlFor="html5-text-input" className="col-md-2 col-form-label">내용</label>
+                            <div className="col-md-10">
+                                <input className="form-control" type="text" defaultValue={boardDto.content}
+                                       id="html5-text-input" name="content" title="내용" required={true}/>
                             </div>
+                        </div>
 
-                            <div className="mb-3 row">
-                                <label htmlFor="html5-text-input" className="col-md-2 col-form-label">파일</label>
-                                <div className={`col-md-10 ${boardDto.boardFileDtoList?.length > 0 ? 'd-none' : ''}`}>
-                                    <label className="col-form-label">첨부된 파일이 없습니다.</label>
-                                </div>
-                                <div className={`col-md-10 ${boardDto.boardFileDtoList?.length > 0 ? '' : 'd-none'}`}>
-                                    <Carousel fileDtoList={boardDto.boardFileDtoList}/>
-                                </div>
+                        <div className="mb-3 row">
+                            <label htmlFor="html5-text-input" className="col-md-2 col-form-label">파일</label>
+                            <div className={`col-md-10 ${boardDto.boardFileDtoList?.length > 0 ? 'd-none' : ''}`}>
+                                <label className="col-form-label">첨부된 파일이 없습니다.</label>
                             </div>
+                            <div className={`col-md-10 ${boardDto.boardFileDtoList?.length > 0 ? '' : 'd-none'}`}>
+                                <Carousel fileDtoList={boardDto.boardFileDtoList}/>
+                            </div>
+                        </div>
 
-                            <div className="mb-3 row">
-                                <label htmlFor="html5-date-input"
-                                       className="col-md-2 col-form-label">등록일</label>
-                                <div className="col-md-10">
-                                    <label className="col-form-label">{boardDto.regDate}</label>
-                                </div>
+                        <div className="mb-3 row">
+                            <label htmlFor="html5-date-input"
+                                   className="col-md-2 col-form-label">등록일</label>
+                            <div className="col-md-10">
+                                <label className="col-form-label">{boardDto.regDate}</label>
                             </div>
-                            <div className="mb-3 row">
-                                <label htmlFor="html5-date-input"
-                                       className="col-md-2 col-form-label">등록자</label>
-                                <div className="col-md-10">
-                                    <label className="col-form-label">{boardDto.registerNm}</label>
-                                </div>
+                        </div>
+                        <div className="mb-3 row">
+                            <label htmlFor="html5-date-input"
+                                   className="col-md-2 col-form-label">등록자</label>
+                            <div className="col-md-10">
+                                <label className="col-form-label">{boardDto.registerNm}</label>
                             </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -153,6 +151,9 @@ const BoardMgmtViewPage = ({leftMenuInfo}) => {
             <div className="dataTables_info" id="DataTables_Table_1_info" role="status" aria-live="polite">
                 총 {tableResult.totalElements}개의 데이터 중 {tableResult.numberOfElements}개
             </div>
+            <form ref={searchFormRef}>
+                <input name="page" id="page" type="hidden"/>
+            </form>
         </div>
         <Table
             columnList={[
@@ -169,7 +170,7 @@ const BoardMgmtViewPage = ({leftMenuInfo}) => {
             renderRowCallback={renderRows}
         />
 
-        <Pagination tableResult={tableResult}/>
+        <Pagination tableResult={tableResult} getResultCallback={getReplyList}/>
 
         <div className="d-flex justify-content-between">
             <button type="button" className="btn btn-secondary" onClick={goList}>리스트</button>
