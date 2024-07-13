@@ -4,7 +4,7 @@ import Table from "../../components/Table";
 import MenuTitle from "../../layout/MenuTitle";
 import Pagination from "../../layout/Pagination";
 
-const AuthMgmtListPage = ({leftMenuInfo, filePath}) => {
+const AuthMgmtListPage = ({leftMenuInfo, filePath, authTypes}) => {
     const [ managerTableResult, setManagerTableResult ] = useState({});
     
     const [ parentTableResult, setParentTableResultList ] = useState({});

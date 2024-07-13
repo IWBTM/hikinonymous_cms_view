@@ -5,7 +5,7 @@ import Table from "../../components/Table";
 import Pagination from "../../layout/Pagination";
 import MenuTitle from "../../layout/MenuTitle";
 
-const BannerMgmtListPage = ({leftMenuInfo, filePath}) => {
+const BannerMgmtListPage = ({leftMenuInfo, filePath, authTypes}) => {
     const [ tableResult, setTableResultList ] = useState({});
     const [ isLoadingOfTable, setIsLoadingOfTable ] = useState({});
 

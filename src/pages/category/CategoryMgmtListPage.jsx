@@ -4,7 +4,7 @@ import Table from "../../components/Table";
 import MenuTitle from "../../layout/MenuTitle";
 import Pagination from "../../layout/Pagination";
 
-const CategoryMgmtListPage = ({leftMenuInfo, filePath}) => {
+const CategoryMgmtListPage = ({leftMenuInfo, filePath, authTypes}) => {
     const [ parentTableResult, setParentTableResultList ] = useState({});
     const [ registerDto, setRegisterDto ] = useState({});
     const [ isLoadingOfTable, setIsLoadingOfTable ] = useState({});

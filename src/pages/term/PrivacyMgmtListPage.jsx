@@ -4,7 +4,7 @@ import Table from "../../components/Table";
 import MenuTitle from "../../layout/MenuTitle";
 import Pagination from "../../layout/Pagination";
 
-const PrivacyMgmtListPage = ({leftMenuInfo, filePath}) => {
+const PrivacyMgmtListPage = ({leftMenuInfo, filePath, authTypes}) => {
     const [ parentTableResult, setParentTableResultList ] = useState({});
 
     const [ isExist, setIsExist ] = useState(false);

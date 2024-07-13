@@ -5,7 +5,7 @@ import Table from "../../components/Table";
 import Pagination from "../../layout/Pagination";
 import MenuTitle from "../../layout/MenuTitle";
 
-const InquiryMgmtListPage = ({leftMenuInfo, filePath}) => {
+const InquiryMgmtListPage = ({leftMenuInfo, filePath, authTypes}) => {
     const [ tableResult, setTableResultList ] = useState({});
     const [ isLoadingOfTable, setIsLoadingOfTable ] = useState({});
 

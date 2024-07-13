@@ -7,7 +7,7 @@ import Table from "../../components/Table";
 import Pagination from "../../layout/Pagination";
 import Carousel from "../../components/Carsousel";
 
-const BoardMgmtViewPage = ({leftMenuInfo}) => {
+const BoardMgmtViewPage = ({leftMenuInfo, authTypes})  => {
 
     const location = useLocation();
     const { seq, filePath } = location.state;

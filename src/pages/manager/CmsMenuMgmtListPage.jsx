@@ -4,7 +4,7 @@ import Table from "../../components/Table";
 import MenuTitle from "../../layout/MenuTitle";
 import Pagination from "../../layout/Pagination";
 
-const CmsMenuMgmtListPage = ({leftMenuInfo, filePath}) => {
+const CmsMenuMgmtListPage = ({leftMenuInfo, filePath, authTypes}) => {
     const [ parentTableResult, setParentTableResultList ] = useState({});
     const [ childTableResult, setChildTableResultList ] = useState({});
 

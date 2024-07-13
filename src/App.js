@@ -158,9 +158,9 @@ function App() {
     }
     
     const setMenuMgmtRoute = (childPages, leftMenu, menu, ListPageComponent, ViewPageComponent) => {
-        if (leftMenu.authTypes?.indexOf('R' > -1)) {
+        if (leftMenu.authTypes?.indexOf('R' > -1) && menu.authTypes?.indexOf('R' > -1)) {
             setListPageRoute(childPages, leftMenu, menu, ListPageComponent);
-            if (ViewPageComponent && menu.authTypes?.indexOf('R' > -1)) {
+            if (ViewPageComponent) {
                 setViewPageRoute(childPages, leftMenu, menu, ViewPageComponent);
             }
         }
@@ -182,9 +182,10 @@ function App() {
                         filePath={
                             menu.filePath
                         }
-                        authTypes={
-                            menu.authTypes
-                        }
+                        authTypes={{
+                            parentAuth: leftMenu.authTypes,
+                            childAuth: menu.authTypes
+                        }}
                     />
                 }
             />
@@ -203,9 +204,10 @@ function App() {
                             parentNm: leftMenu.menuNm,
                             childNm: menu.menuNm
                         }}
-                        authTypes={
-                            menu.authTypes
-                        }
+                        authTypes={{
+                            parentAuth: leftMenu.authTypes,
+                            childAuth: menu.authTypes
+                        }}
                     />
                 }
             />

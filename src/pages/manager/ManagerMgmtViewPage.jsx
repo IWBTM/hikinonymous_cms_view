@@ -4,7 +4,7 @@ import {useEffect, useRef, useState} from "react";
 import getCodeListByCodeMaster from "../../api/common/getCode";
 import api from "../../api/api";
 
-const ManagerMgmtViewPage = ({leftMenuInfo}) => {
+const ManagerMgmtViewPage = ({leftMenuInfo, authTypes})  => {
 
     const location = useLocation();
     const { seq, filePath } = location.state;

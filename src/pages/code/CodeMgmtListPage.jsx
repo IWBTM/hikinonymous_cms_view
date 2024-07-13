@@ -4,7 +4,7 @@ import Table from "../../components/Table";
 import MenuTitle from "../../layout/MenuTitle";
 import Pagination from "../../layout/Pagination";
 
-const CodeMgmtListPage = ({leftMenuInfo, filePath}) => {
+const CodeMgmtListPage = ({leftMenuInfo, filePath, authTypes}) => {
     const [ parentTableResult, setParentTableResultList ] = useState({});
     const [ childTableResult, setChildTableResultList ] = useState({});
 

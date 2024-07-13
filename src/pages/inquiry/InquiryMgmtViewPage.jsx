@@ -3,7 +3,7 @@ import {useLocation, useNavigate} from "react-router-dom";
 import {useEffect, useRef, useState} from "react";
 import api from "../../api/api";
 
-const InquiryMgmtViewPage = ({leftMenuInfo}) => {
+const InquiryMgmtViewPage = ({leftMenuInfo, authTypes})  => {
 
     const location = useLocation();
     const { seq, filePath } = location.state;
